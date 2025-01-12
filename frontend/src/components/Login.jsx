@@ -5,6 +5,8 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
+import { useDispatch } from 'react-redux'
+import { setAuthUser } from '@/redux/authSlice'
 
 function Login() {
 	const [input, setInput] = useState({ 
@@ -13,11 +15,13 @@ function Login() {
 	})
 	const [loading, setLoading] = useState(false);
 
+	const navigate = useNavigate()
+	const dispatch = useDispatch();
+
 	const chagneEventHandler = (e) => {
 		setInput({ ...input, [e.target.name]: e.target.value })
 	}
 
-	const navigate = useNavigate()
 
 	const signupHandler = async (e) => {
 		e.preventDefault();
@@ -29,8 +33,9 @@ function Login() {
 				},
 				withCredentials: true
 			});
-			console.log(res)
+			// console.log(res)
 			if(res.data.success) {
+				dispatch(setAuthUser(res.data.user))
 				navigate('/')
 				toast.success(res.data.message);
 				setInput({ 
@@ -38,7 +43,7 @@ function Login() {
 					password: "",
 				})
 			}
-			console.log(res)
+			// console.log(res)
 		} catch (error) {
 			console.log("Login handler error"+ error)
 			toast.error(error.response.data.message);

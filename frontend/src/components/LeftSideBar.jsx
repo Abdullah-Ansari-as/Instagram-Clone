@@ -1,37 +1,29 @@
 import { Heart, Home, LogOut, MessageCircle, PlusSquare, Search, TrendingUp } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { toast } from 'sonner'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-
-const sideBarItems = [
-	{ icon: <Home className='w-7 h-7' />, text: "Home" },
-	{ icon: <Search className='w-7 h-7' />, text: "Search" },
-	{ icon: <TrendingUp className='w-7 h-7' />, text: "Explore" },
-	{ icon: <MessageCircle className='w-7 h-7' />, text: "Messages" },
-	{ icon: <Heart className='w-7 h-7' />, text: "Notifications" },
-	{ icon: <PlusSquare className='w-7 h-7' />, text: "Create" },
-	{
-		icon: (
-			<Avatar className="w-6 h-6">
-				<AvatarImage src="https://github.com/shadcn.png" />
-				<AvatarFallback>CN</AvatarFallback>
-			</Avatar>
-		), text: "Profile"
-	},
-	{ icon: <LogOut />, text: "Logout" },
-]
+import { useDispatch, useSelector } from 'react-redux'
+import { setAuthUser } from '@/redux/authSlice'
+import CreatePost from './CreatePost'
 
 
 function LeftSideBar() {
 
+	const [open, setOpen] = useState(false)
+	console.log(open)
+
 	const navigate = useNavigate()
+	const {user} = useSelector(store => store.auth)
+	// console.log(user)
+	const dispatch = useDispatch()
 
 	const logoutHandler = async () => {
 		try {
 			const res = await axios.get("http://localhost:3000/api/v1/users/logout", { withCredentials: true });
 			if (res.data.success) {
+				dispatch(setAuthUser(null));	
 				navigate("/login")
 				toast.success(res.data.message)
 			}
@@ -41,8 +33,30 @@ function LeftSideBar() {
 	}
 
 	const sidebarHandler = (textType) => {
-		if (textType === "Logout") logoutHandler();
+		if (textType === "Logout"){
+			logoutHandler();
+		} else if(textType === "Create") {
+			setOpen(true)
+		}
 	}
+
+	const sideBarItems = [
+		{ icon: <Home className='w-7 h-7' />, text: "Home" },
+		{ icon: <Search className='w-7 h-7' />, text: "Search" },
+		{ icon: <TrendingUp className='w-7 h-7' />, text: "Explore" },
+		{ icon: <MessageCircle className='w-7 h-7' />, text: "Messages" },
+		{ icon: <Heart className='w-7 h-7' />, text: "Notifications" },
+		{ icon: <PlusSquare className='w-7 h-7' />, text: "Create" },
+		{
+			icon: (
+				<Avatar className="w-6 h-6">
+					<AvatarImage src={user?.profilePicture} />
+					<AvatarFallback>CN</AvatarFallback>
+				</Avatar>
+			), text: "Profile"
+		},
+		{ icon: <LogOut />, text: "Logout" },
+	]
 
 
 	return ( 
@@ -70,6 +84,7 @@ function LeftSideBar() {
 					})
 				}
 			</div>
+			<CreatePost open={open} setOpen={setOpen}/>
 		</div>
 	)
 }

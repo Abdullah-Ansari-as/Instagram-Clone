@@ -4,7 +4,7 @@ import {
 	DialogContent,
 	DialogTrigger,
 } from "@/components/ui/dialog"
-import { Bookmark, Ellipsis, MessageCircle, Send } from 'lucide-react';
+import { Bookmark, Ellipsis, MessageCircle, MoreHorizontal, Send } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button'; 
 import { FaRegHeart } from 'react-icons/fa';  
@@ -40,7 +40,7 @@ function Post() {
 					<h1>username</h1>
 				</div>
 				<Dialog>
-					<DialogTrigger><Ellipsis /></DialogTrigger>
+					<DialogTrigger><MoreHorizontal /></DialogTrigger>
 					<DialogContent className='flex flex-col items-center text-center text-sm lg:w-[28rem] w-72 bg-white border rounded-[20px] gap-0 px-0' >
 						<Button variant='ghost' className=" rounded-xl text-red-500 hover:text-red-500 font-bold w-fit my-2">Report </Button><hr className='w-full color' />
 						<Button variant='ghost' className=" rounded-xl text-red-500 hover:text-red-500 font-bold w-fit my-2">UnFollow </Button><hr className='w-full color' />
