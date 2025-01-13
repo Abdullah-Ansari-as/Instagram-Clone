@@ -1,7 +1,7 @@
 import { User } from "../models/user-model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { uploadOnCloudinary } from "../utils/cloudinary.js"; 
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { Post } from "../models/post-model.js";
 
 
@@ -75,17 +75,19 @@ const login = async (req, res) => {
 		// console.log(isPasswordValid)
 
 		const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET_KEY, { expiresIn: "1d" });
+		// console.log(token)
 
 		// populate each post if in the posts array 
 		const populatedPosts = await Promise.all(
-			user.posts.map( async (postId) => {
+			user.posts.map(async (postId) => {
 				const post = await Post.findById(postId);
-				if(post.author.equals(user._id)) {
+				if (post && post.author.equals(user._id)) {
 					return post;
 				}
-				return null; 
+				return null;
 			})
-		)
+		);
+		// console.log(populatedPosts)
 
 		user = {
 			_id: user._id,
@@ -109,7 +111,7 @@ const login = async (req, res) => {
 		return res.status(500).json({
 			message: "failed to login a user: " + error,
 			success: false
-			
+
 		})
 	}
 }
@@ -164,7 +166,7 @@ const editProfile = async (req, res) => {
 	try {
 		const userId = req.id;
 		const { bio, gender } = req.body;
-		const localFilePath = req.file?.path; 
+		const localFilePath = req.file?.path;
 		// console.log(localFilePath)
 
 		if (!bio || !gender) {
@@ -179,14 +181,14 @@ const editProfile = async (req, res) => {
 				message: "profile Picture is required",
 				success: false
 			})
-		} 
+		}
 		const fileUploaded = await uploadOnCloudinary(localFilePath);
 		// console.log(fileUploaded)
 		if (!fileUploaded.url) {
 			return res.status(400).json({
 				message: "faild to upload photo on cloudinary"
 			})
-		} 
+		}
 
 		const user = await User.findByIdAndUpdate(
 			userId,
@@ -232,7 +234,7 @@ const getSuggestedUser = async (req, res) => {
 			})
 		};
 
-		return res.status(200).json({ 
+		return res.status(200).json({
 			users: suggestedUsers,
 			success: true,
 		})

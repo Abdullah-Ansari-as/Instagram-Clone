@@ -12,7 +12,7 @@ import CreatePost from './CreatePost'
 function LeftSideBar() {
 
 	const [open, setOpen] = useState(false)
-	console.log(open)
+	// console.log(open)
 
 	const navigate = useNavigate()
 	const {user} = useSelector(store => store.auth)

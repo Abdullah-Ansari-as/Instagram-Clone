@@ -8,20 +8,25 @@ const addNewPost = async (req, res) => {
 		const { caption } = req.body;
 		const localFilePath = req.file?.path;
 		const authorId = req.id;
+
+		// console.log(caption, localFilePath, authorId) 
+
 		if (!caption) {
 			return res.status(404).json({
 				message: "Post caption is required",
 				success: false
 			})
 		};
-		if (!image) {
+		if (!localFilePath) {
 			return res.status(404).json({
-				message: "image is required",
+				message: "localfilepath is required",
 				success: false
 			})
 		};
 
+		// console.log("before upload...")
 		const uploadedFile = await uploadOnCloudinary(localFilePath);
+		// console.log("upload complete: ", uploadedFile)
 
 		const post = await Post.create({
 			caption,
@@ -47,6 +52,7 @@ const addNewPost = async (req, res) => {
 			message: "New post added successfully",
 			success: true
 		})
+ 
 
 	} catch (error) {
 		return res.status(500).json({
