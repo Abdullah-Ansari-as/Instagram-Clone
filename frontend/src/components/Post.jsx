@@ -12,7 +12,8 @@ import CommentDialog from './CommentDialog';
 
 
 
-function Post() {
+function Post({post}) {
+console.log(post)
 
 	const [text, setText] = useState("");
 	const [open, setOpen] = useState(false);
@@ -34,10 +35,10 @@ function Post() {
 			<div className="flex items-center justify-between">
 				<div className="flex items-center gap-2">
 					<Avatar>
-						<AvatarImage src='' alt='Post_image' />
+						<AvatarImage src={post.author?.profilePicture} alt='Post_image' />
 						<AvatarFallback>CN</AvatarFallback>
 					</Avatar>
-					<h1>username</h1>
+					<h1>{post.author?.username}</h1>
 				</div>
 				<Dialog>
 					<DialogTrigger><MoreHorizontal /></DialogTrigger>
@@ -56,7 +57,7 @@ function Post() {
 
 			<img
 				className='rounded-lg my-2 w-full object-cover aspect-square'
-				src="https://images.pexels.com/photos/28406651/pexels-photo-28406651/free-photo-of-historic-armenian-church-on-akdamar-island-van.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+				src={post.image}
 				alt="post_img"
 			/>
 			 
@@ -71,11 +72,11 @@ function Post() {
 				</div>
 			</div> 
 
-			<span className='text-sm font-medium block mb-1'>34 likes</span>
+			<span className='text-sm font-medium block mb-1'>{post.likes.length} likes</span>
 
 			<p> 
-				<span className='font-medium mr-2'>username</span>
-				caption
+				<span className='font-medium mr-2'>{post.author?.username}</span>
+				{post.caption}
 			</p>
 
 			<span onClick={() => setOpen(true)} className='cursor-pointer text-sm text-gray-400'>view all 100 comments</span>

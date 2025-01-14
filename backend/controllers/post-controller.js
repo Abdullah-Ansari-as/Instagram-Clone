@@ -64,7 +64,7 @@ const addNewPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
 	try {
-		const posts = Post.find().sort({ createdAt: -1 })
+		const posts = await Post.find().sort({ createdAt: -1 })
 			.populate({ path: "author", select: 'username profilePicture' })
 			.populate({
 				path: "comments",
@@ -75,10 +75,12 @@ const getAllPosts = async (req, res) => {
 				}
 			});
 
+			// console.log(posts)
+
 			return res.status(200).json({
 				message: "All posts fetch successfully",
 				posts,
-				cuccess: true
+				success: true
 			})
 	} catch (error) {
 		return res.status(500).json({
