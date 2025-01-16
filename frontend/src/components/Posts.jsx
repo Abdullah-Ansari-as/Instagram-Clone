@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 
 function Posts() {
 
-	// directly array a rha hai posts ka "postSlice.js" file "initialState" me se
+	// directly [array] a rha hai posts ka "postSlice.js" file "initialState" me se
 	const posts = useSelector(state => state.post.Posts); 
 	// console.log(posts)
 	return (

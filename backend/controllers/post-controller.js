@@ -11,12 +11,6 @@ const addNewPost = async (req, res) => {
 
 		// console.log(caption, localFilePath, authorId) 
 
-		if (!caption) {
-			return res.status(404).json({
-				message: "Post caption is required",
-				success: false
-			})
-		};
 		if (!localFilePath) {
 			return res.status(404).json({
 				message: "localfilepath is required",
@@ -133,8 +127,9 @@ const likePost = async (req, res) => {
 			})
 		}
 
-		await Post.updateOne({ $addToSet: {likes: currentUserId} });
-		await Post.save();
+
+		await post.updateOne({ $addToSet: {likes: currentUserId} });
+		await post.save();
 
 		//TODO: implemet socket io for real time notifications
 		 
@@ -146,7 +141,7 @@ const likePost = async (req, res) => {
 
 	} catch (error) {
 		return res.status(500).json({
-			message: "Failed to get user's posts",
+			message: "Failed to like a post",
 			success: false
 		})
 	}
@@ -164,8 +159,8 @@ const unLikePost = async (req, res) => {
 			})
 		}
 
-		await Post.updateOne({ $pull: {likes: currentUserId} });
-		await Post.save();
+		await post.updateOne({ $pull: {likes: currentUserId} });
+		await post.save();
 
 		//TODO: implemet socket io for real time notifications
 		 
@@ -198,15 +193,20 @@ const addComment = async (req, res) => {
 				message: "Post not fount"
 			})
 		};
-	
+		// console.log(post)  
+
 		const comment = await Comment.create({
 				text,
 				author: currUserId,
 				post: post._id
-		}).populate({
+		})
+		
+		await comment.populate({
 			path: "author",
 			select: "username profilePicture"
-		});
+		})
+
+		// console.log(comment)
 	
 		post.comments.push(comment?._id);
 		await post.save();
@@ -217,6 +217,7 @@ const addComment = async (req, res) => {
 			success: true
 		})
 	} catch (error) {
+		console.log(error)
 		return res.status(500).json({
 			message: "Failed to add a comment",
 			success: false
@@ -253,11 +254,12 @@ const deletePost = async (req, res) => {
 		const authorId = req.id;
 
 		const post = await Post.findById(postId);
-		if(!post) return res.status(400).json({message: "Failed to fetch post", success: false});
+		if(!post) return res.status(400).json({message: "Post not found", success: false});
 
+		// console.log(post.author.toString(), authorId)
 		// check if the loggedIn user is the owner of the post
-		if(post.author.toString() !== postId) {
-			return res.status(403).json({
+		if(post.author.toString() !== authorId) {
+			return res.status(403).json({	
 				message: "Unauthorized",
 				success: false
 			})

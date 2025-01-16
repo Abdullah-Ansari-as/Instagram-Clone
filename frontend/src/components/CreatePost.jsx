@@ -1,13 +1,14 @@
 import React, { useRef, useState } from 'react'
 import { Dialog, DialogContent, DialogHeader } from './ui/dialog'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
 import { readFileAsDataURL } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import axios from 'axios';
+import axios from 'axios'; 
+import { setPosts } from '@/redux/postSlice';
 
 function CreatePost({ open, setOpen }) {
 
@@ -16,8 +17,13 @@ function CreatePost({ open, setOpen }) {
 	const [imgPreview, setImgpreview] = useState("");
 	const [loading, setLoading] = useState(false); 
 
+	const user = useSelector(state => state.auth);
+	// console.log(user.user.profilePicture)
+	const posts = useSelector(state => state.post.Posts)
+	// console.log(posts)
 
 	const imgRef = useRef();
+	const dispatch = useDispatch();
 
 	const fileChangeHandler = async (e) => {
 		const file = e.target.files?.[0];
@@ -45,7 +51,12 @@ function CreatePost({ open, setOpen }) {
 				withCredentials: true
 			});
 			if(res.data.success) {
+				// console.log(res.data.post)
+				dispatch(setPosts([res.data.post, ...posts]))
 				toast.success(res.data.message);
+				setOpen(false)
+				setCaption("")
+				setImgpreview("")
 			}
 		} catch (error) {
 			toast.error(error.response.data.message)
@@ -54,8 +65,7 @@ function CreatePost({ open, setOpen }) {
 		}
 	}
 
-	const user = useSelector(state => state.auth)
-	// console.log(user.user.profilePicture)
+	
 
 	return (
 		<Dialog open={open} className=''>
@@ -90,12 +100,12 @@ function CreatePost({ open, setOpen }) {
 					{
 						imgPreview && (
 							loading ? (
-								<Button>
-									<Loader2 className='mr-2 h-4 w-4 animate-spin' />
+								<Button className='w-full mt-3 flex justify-center text-white bg-slate-800 rounded hover:bg-slate-800'>
+									<Loader2 className='mr-1 h-4 w-4 animate-spin ' />
 									Please wait
 								</Button>
 							) : (
-								<Button onClick={createPostHandler} type='submit' className='w-full mt-3'>Post</Button>
+								<Button onClick={createPostHandler} type='submit' className='w-full mt-3 bg-slate-800 hover:bg-slate-900 rounded text-white'>Post</Button>
 							)
 						)
 					}
