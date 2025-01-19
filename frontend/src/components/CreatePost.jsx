@@ -19,7 +19,7 @@ function CreatePost({ open, setOpen }) {
 
 	const user = useSelector(state => state.auth);
 	// console.log(user.user.profilePicture)
-	const posts = useSelector(state => state.post.Posts)
+	const {posts} = useSelector(store => store.post);
 	// console.log(posts)
 
 	const imgRef = useRef();
@@ -52,7 +52,7 @@ function CreatePost({ open, setOpen }) {
 			});
 			if(res.data.success) {
 				// console.log(res.data.post)
-				dispatch(setPosts([res.data.post, ...posts]))
+				dispatch(setPosts([...posts, res.data.post]))
 				toast.success(res.data.message);
 				setOpen(false)
 				setCaption("")
@@ -96,7 +96,7 @@ function CreatePost({ open, setOpen }) {
 						)
 					}
 					<input ref={imgRef} type='file' className='hidden' onChange={fileChangeHandler}></input>
-					<Button onClick={() => imgRef.current.click()} className='flex w-fit mx-auto bg-[#0095f6] hover:bg-[#097fce] rounded'>Choose a file</Button>
+					<Button onClick={() => imgRef.current.click()} className='flex w-fit mx-auto mt-2 bg-[#0095f6] hover:bg-[#097fce] rounded'>Choose a file</Button>
 					{
 						imgPreview && (
 							loading ? (

@@ -216,6 +216,7 @@ const addComment = async (req, res) => {
 			message: "Comment added successfully",
 			success: true
 		})
+		
 	} catch (error) {
 		console.log(error)
 		return res.status(500).json({

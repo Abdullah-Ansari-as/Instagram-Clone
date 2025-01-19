@@ -53,6 +53,9 @@ export default {
 			},
 			screens: {
 				'500px': '500px',
+				'1120px': '1120px',
+				'945px': '945px',
+				'640px': '640px'
 			},
 			keyframes: {
 				heartBeat: {
