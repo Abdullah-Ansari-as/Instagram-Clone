@@ -11,7 +11,7 @@ function RightSidebar() {
 	// console.log(user)
 
 	return (
-		<div className='w-fit my-10 pr-32 hidden 945px:block'>
+		<div className='w-fit my-10 pr-20 hidden 945px:block'>
 			<div className="flex items-center gap-2">
 				<Link to={`/profile/${user._id}`}>
 					<Avatar>
@@ -21,7 +21,7 @@ function RightSidebar() {
 				</Link>
 				<div className=''>
 					<h1 className='font-semibold text-sm'><Link to={`/profile/${user._id}`}>{user?.username}</Link></h1>
-					<span className='text-gray-600 text-sm'>{user?.bio || "Bio here"}</span>
+					<span className='text-gray-600 text-sm'>{user?.bio.length > 30 ? user?.bio.slice(0, 30)+'...' : user?.bio || "Bio here"}</span>
 				</div>
 			</div>
 

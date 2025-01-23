@@ -9,6 +9,7 @@ import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import axios from 'axios'; 
 import { setPosts } from '@/redux/postSlice';
+import { setUserProfile } from '@/redux/authSlice';
 
 function CreatePost({ open, setOpen }) {
 
@@ -17,10 +18,11 @@ function CreatePost({ open, setOpen }) {
 	const [imgPreview, setImgpreview] = useState("");
 	const [loading, setLoading] = useState(false); 
 
-	const user = useSelector(state => state.auth);
-	// console.log(user.user.profilePicture)
+	const {user, userProfile} = useSelector(state => state.auth);
+	// console.log(user)
+	// console.log(userProfile.posts)
 	const {posts} = useSelector(store => store.post);
-	// console.log(posts)
+	// console.log(posts)' 
 
 	const imgRef = useRef();
 	const dispatch = useDispatch();
@@ -52,6 +54,12 @@ function CreatePost({ open, setOpen }) {
 			});
 			if(res.data.success) {
 				// console.log(res.data.post)
+				// update posts array in "userProfile" => a redux state variable
+				if(user._id === res.data.post.author._id) {
+					const currentPosts = userProfile.posts;
+					const updatedPostsArray = [...currentPosts, res.data.post]
+					dispatch(setUserProfile({...userProfile, posts: updatedPostsArray }))
+				}
 				dispatch(setPosts([...posts, res.data.post]))
 				toast.success(res.data.message);
 				setOpen(false)
@@ -78,7 +86,7 @@ function CreatePost({ open, setOpen }) {
 				<div className="mx-3">
 					<div className='flex gap-3 items-center my-5'>
 						<Avatar>
-							<AvatarImage src={user?.user?.profilePicture} alt='img' />
+							<AvatarImage src={user?.profilePicture} alt='img' />
 							<AvatarFallback>CN</AvatarFallback>
 						</Avatar>
 						<div>

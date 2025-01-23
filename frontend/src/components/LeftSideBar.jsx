@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { toast } from 'sonner'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setAuthUser } from '@/redux/authSlice'
 import CreatePost from './CreatePost'
@@ -42,6 +42,8 @@ function LeftSideBar() {
 			setOpen(true)
 		} else if(textType === "Profile") {
 			navigate(`/profile/${user?._id}`);
+		} else if(textType === "Home") {
+			navigate('/')
 		}
 	}
 
@@ -68,16 +70,16 @@ function LeftSideBar() {
 		<div className='sm:flex px-4 w-20 1120px:w-60 lg:w-48 shrink hidden border-r border-gray-300 h-screen fixed top-0 z-10 left-0 '>
 			<div className="flex flex-col">
 				{/* Picture Shown on large screens */}
-				<img
+				<Link to='/'><img
 					className='hidden lg:block mt-5 pl-4 w-[120px]'
-					src="./insta-logo.png"
-					alt="Logo" />
+					src="/instaLogo.png"
+					alt="Logo" /></Link>
 
 				{/* Picture Shown on small screens */}
-				<img
+				<Link to='/'><img
 					className='block lg:hidden lg:my-10 my-3 object-cover lg:mt-5 mt-2 lg:pl-4 md:w-[120px]'
-					src="./insta-logo-for-sm.png"
-					alt="Logo" />
+					src="./instaLogoForSm.png"
+					alt="Logo" /></Link>
 				{
 					sideBarItems.map((item, ind) => {
 						return (

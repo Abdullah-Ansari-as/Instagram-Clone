@@ -26,11 +26,11 @@ function SuggestedUsers() {
 								</Link>
 								<div className=''>
 									<h1 className='font-semibold text-sm'><Link to={`/profile/${user._id}`}>{user?.username}</Link></h1>
-									<span className='text-gray-600 text-sm'>{user?.bio || "Bio here"}</span>
+									<span className='text-gray-600 text-sm'>{user?.bio.length > 23 ? user?.bio.slice(0, 23)+'...' : user?.bio || "Bio here"}</span>
 								</div>
 							</div>
 
-							<span className='text-xs text-[#3BADF8] font-bold cursor-pointer hover:text-[#2a8aca]'>Follow</span>
+							<span className='text-xs text-[#3BADF8] font-bold cursor-pointer hover:text-[#2a8aca] ml-6'>Follow</span>
 
 						</div>
 					)

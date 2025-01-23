@@ -140,7 +140,7 @@ const getProfile = async (req, res) => {
 			});
 		}
 
-		const user = await User.findById(userId).select("-password");
+		const user = await User.findById(userId).populate({ path: 'posts', createdAt: -1 }).populate('bookmarks');
 		if (!user) {
 			return res.status(404).json({
 				message: "No user found",
@@ -167,47 +167,38 @@ const editProfile = async (req, res) => {
 		const userId = req.id;
 		const { bio, gender } = req.body;
 		const localFilePath = req.file?.path;
-		// console.log(localFilePath)
+		// console.log(localFilePath) 
+		// console.log(bio, gender)
 
-		if (!bio || !gender) {
-			return res.status(404).json({
-				message: "bio and gender is required",
-				success: false
-			})
+		let cloudResponse;
+
+		if (localFilePath) {
+			const fileUploaded = await uploadOnCloudinary(localFilePath);
+			// console.log(fileUploaded)
+			cloudResponse = fileUploaded.secure_url;
+			// console.log(cloudResponse)
+			if (!fileUploaded.url) {
+				return res.status(400).json({
+					message: "faild to upload photo on cloudinary"
+				})
+			}
 		}
 
-		if (!localFilePath) {
-			return res.status(404).json({
-				message: "profile Picture is required",
-				success: false
-			})
-		}
-		const fileUploaded = await uploadOnCloudinary(localFilePath);
-		// console.log(fileUploaded)
-		if (!fileUploaded.url) {
-			return res.status(400).json({
-				message: "faild to upload photo on cloudinary"
-			})
-		}
-
-		const user = await User.findByIdAndUpdate(
-			userId,
-			{
-				$set: {
-					profilePicture: fileUploaded.secure_url,
-					bio,
-					gender
-				}
-			},
-			{ new: true }
-		).select("-password");
-
+		const user = await User.findById(userId ).select("-password");
 		if (!user) {
 			return res.status(404).json({
 				message: "User not found",
 				success: false
 			})
 		};
+		// console.log(user.bio)
+		// console.log(user.gender)
+
+		if(bio) user.bio = bio;
+		if(gender) user.gender = gender;
+		if(localFilePath) user.profilePicture = cloudResponse;
+
+		await user.save();
 
 		return res.status(200).json({
 			data: user,
@@ -216,6 +207,7 @@ const editProfile = async (req, res) => {
 		})
 
 	} catch (error) {
+		console.log(error)
 		return res.status(500).json({
 			message: "failed to edit profile",
 			success: false

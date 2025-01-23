@@ -47,7 +47,7 @@ function CommentDialog({ open, setOpen }) {
         },
         withCredentials: true
       });
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.success) {
         const updatedCommentData = [...comment, res.data.comment];
         setComment(updatedCommentData);

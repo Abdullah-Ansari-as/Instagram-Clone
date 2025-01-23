@@ -45,6 +45,14 @@ function Post({ post }) {
 		}
 	}
 
+	const timestamp = new Date(post.createdAt);
+	// Options for formatting
+	const options = { day: '2-digit', month: 'short' };
+	// Format the date
+	const formattedDate = timestamp.toLocaleDateString('en-US', options);
+	// console.log(formattedDate)
+
+
 	const deletePostHandler = async () => {
 		try {
 			const res = await axios.delete(`http://localhost:3000/api/v1/posts/delete/${post?._id}`, { withCredentials: true })
@@ -125,8 +133,9 @@ function Post({ post }) {
 						<AvatarImage src={post.author?.profilePicture} alt='Post_image' />
 						<AvatarFallback>CN</AvatarFallback>
 					</Avatar>
-					<div className='flex items-center gap-3'>
+					<div className='flex items-center gap-2'>
 						<h1>{post.author?.username}</h1>
+						<span className='text-sm text-gray-400'>{formattedDate}</span>
 						{user._id === post.author._id && <Badge className='bg-[#f2f3f5] rounded-xl' variant="secondary">Author</Badge>}
 					</div>
 				</div>
@@ -162,7 +171,7 @@ function Post({ post }) {
 			</div>
 
 			<img
-				className='rounded-lg my-2 w-full object-cover aspect-square'
+				className='rounded-lg my-2 w-full object-cover bg-top aspect-square'
 				src={post.image}
 				alt="post_img"
 			/>
