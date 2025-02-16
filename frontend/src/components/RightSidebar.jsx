@@ -8,7 +8,10 @@ import SuggestedUsers from './SuggestedUsers';
 function RightSidebar() {
 
 	const { user } = useSelector(store => store.auth);
-	// console.log(user)
+	// console.log(user)	
+
+	if(!user) return null;
+
 
 	return (
 		<div className='w-fit my-10 pr-20 hidden 945px:block'>

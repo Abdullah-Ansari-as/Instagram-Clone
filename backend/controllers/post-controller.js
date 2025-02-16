@@ -2,6 +2,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { Post } from "../models/post-model.js"
 import { User } from "../models/user-model.js";
 import { Comment } from "../models/comment-model.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 const addNewPost = async (req, res) => {
 	try {
@@ -131,8 +132,22 @@ const likePost = async (req, res) => {
 		await post.updateOne({ $addToSet: {likes: currentUserId} });
 		await post.save();
 
-		//TODO: implemet socket io for real time notifications
-		 
+		// implemet socket io for real time notifications
+		const user = await User.findById(currentUserId).select('username profilePicture');
+		const postOwnerId = post.author.toString();
+		if(postOwnerId !== currentUserId) {
+			// emit a notification event
+			const notification = {
+				type: 'like',
+				userId: currentUserId,
+				userDetails: user,
+				postId,
+				message: "your post was liked"
+			}
+			const postOwnerSocketId = getReceiverSocketId(postOwnerId)
+			io.to(postOwnerSocketId).emit('notification', notification)
+		}
+
 
 		return res.status(200).json({
 			message: "Post liked",
@@ -162,7 +177,21 @@ const unLikePost = async (req, res) => {
 		await post.updateOne({ $pull: {likes: currentUserId} });
 		await post.save();
 
-		//TODO: implemet socket io for real time notifications
+		// implemet socket io for real time notifications
+		const user = await User.findById(currentUserId).select('username profilePicture');
+		const postOwnerId = post.author.toString();
+		if(postOwnerId !== currentUserId) {
+			// emit a notification event
+			const notification = {
+				type: 'dislike',
+				userId: currentUserId,
+				userDetails: user,
+				postId,
+				message: "your post was liked"
+			}
+			const postOwnerSocketId = getReceiverSocketId(postOwnerId)
+			io.to(postOwnerSocketId).emit('notification', notification)
+		}
 		 
 
 		return res.status(200).json({

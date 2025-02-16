@@ -3,8 +3,8 @@ import express, { urlencoded } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser"; 
 import connectDB from './utils/db.js';
-
-const app = express();
+import { app, server, io } from './socket/socket.js';
+// const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
@@ -34,7 +34,7 @@ app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/messages", messageRouter);
 
 
-app.listen(process.env.PORT  || 3000, () => {
+server.listen(process.env.PORT  || 3000, () => {
 	connectDB();
 	console.log("server is running on port " + process.env.PORT)  
 })

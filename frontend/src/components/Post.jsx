@@ -14,6 +14,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
 import axios from 'axios';
 import { setPosts, setSelectedPost } from '@/redux/postSlice';
+import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
+import { Link } from 'react-router-dom';
+
 
 
 
@@ -25,6 +28,8 @@ function Post({ post }) {
 	// console.log(user)
 	const { posts } = useSelector(store => store.post);
 	// console.log(posts)
+	// const { suggestedUsers } = useSelector(store => store.auth);
+	// console.log(suggestedUsers)
 
 	const dispatch = useDispatch()
 
@@ -33,8 +38,9 @@ function Post({ post }) {
 	const [liked, setLiked] = useState(post.likes.includes(user?._id) || false);
 	const [postLike, setPostLike] = useState(post.likes.length);
 	const [isAnimating, setIsAnimating] = useState(false);
-	const [comment, setComment] = useState(post.comments)
+	const [comment, setComment] = useState(post.comments);
 	// console.log(comment.length)
+	const [isBookMarked, setIsBookMarked] = useState(false)
 
 	const handlePostComment = (e) => {
 		const inputText = e.target.value;
@@ -124,17 +130,33 @@ function Post({ post }) {
 		}
 	}
 
+	const bookmarkHandler = async () => {
+		try {
+			const res = await axios.get(`http://localhost:3000/api/v1/posts/${post?._id}/bookmark`, { withCredentials: true });
+			if (res.data.success) {
+				setIsBookMarked(!isBookMarked)
+				toast.success(res.data.message);
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
 
 	return (
 		<div className='my-8 w-full max-w-sm mx-auto'>
 			<div className="flex items-center justify-between mx-3 640px:mx-0">
 				<div className="flex items-center gap-2">
-					<Avatar>
-						<AvatarImage src={post.author?.profilePicture} alt='Post_image' />
-						<AvatarFallback>CN</AvatarFallback>
-					</Avatar>
+
+					<Link to={`/profile/${post.author?._id}`}>
+						<Avatar>
+							<AvatarImage src={post.author?.profilePicture} alt='Post_image' />
+							<AvatarFallback>CN</AvatarFallback>
+						</Avatar>
+					</Link>
+
 					<div className='flex items-center gap-2'>
-						<h1>{post.author?.username}</h1>
+						<Link to={`/profile/${post.author?._id}`}><h1>{post.author?.username}</h1></Link>
 						<span className='text-sm text-gray-400'>{formattedDate}</span>
 						{user._id === post.author._id && <Badge className='bg-[#f2f3f5] rounded-xl' variant="secondary">Author</Badge>}
 					</div>
@@ -191,7 +213,9 @@ function Post({ post }) {
 						<Send className='cursor-pointer hover:text-gray-600 size-5 md:size-6' />
 					</div>
 					<div className="">
-						<Bookmark className='cursor-pointer hover:text-gray-600 size-5 md:size-6' />
+						{
+							isBookMarked ? <IoBookmark onClick={bookmarkHandler} className='cursor-pointer hover:text-gray-600 size-5 md:size-6' /> : <IoBookmarkOutline onClick={bookmarkHandler} className='cursor-pointer hover:text-gray-600 size-5 md:size-6' />
+						}
 					</div>
 				</div>
 

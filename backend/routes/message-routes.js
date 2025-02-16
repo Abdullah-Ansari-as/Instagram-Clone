@@ -5,7 +5,7 @@ import {upload} from "../middlewares/multer-mid.js";
 
 const router = express.Router();
 
-router.route('send/:id').post(isAuthenticated, sendMessage);
-router.route('all/:id').get(isAuthenticated, getMessage);
+router.route('/send/:id').post(isAuthenticated, sendMessage);
+router.route('/all/:id').get(isAuthenticated, getMessage);
 
 export default router;

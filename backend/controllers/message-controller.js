@@ -1,13 +1,15 @@
 import { Conversation } from "../models/conversation-model.js";
 import { Message } from "../models/message-model.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 // This controller is For "Chatting"
 const sendMessage = async (req, res) => {
 	try {
 		const senderId = req.id;
 		const receiverId = req.params.id;
-		const {message} = req.body;
-		if(!message) {
+		const { textMessage: message } = req.body;
+		// console.log(message)
+		if (!message) {
 			return res.status(404).json({
 				messageee: "message is required",
 				success: false
@@ -15,10 +17,10 @@ const sendMessage = async (req, res) => {
 		}
 
 		let conversation = await Conversation.findOne({
-			participants: {$all: [senderId, receiverId]}
+			participants: { $all: [senderId, receiverId] }
 		})
 
-		if(!conversation) {
+		if (!conversation) {
 			conversation = await Conversation.create({
 				participants: [senderId, receiverId]
 			})
@@ -30,13 +32,17 @@ const sendMessage = async (req, res) => {
 			message
 		})
 
-		if(!newMessage) {
+		if (newMessage) {
 			conversation.messages.push(newMessage._id)
 		}
 
 		await Promise.all([conversation.save(), newMessage.save()]);
 
 		// implement socket io for real data transfer
+		const receiverSocketId = getReceiverSocketId(receiverId)
+		if (receiverSocketId) {
+			io.to(receiverSocketId).emit('newMessage', newMessage)
+		}
 
 
 		return res.status(202).json({
@@ -45,7 +51,7 @@ const sendMessage = async (req, res) => {
 		})
 
 	} catch (error) {
-		return res.status(500).json({message: "Failed to send message", success: false})
+		return res.status(500).json({ message: "Failed to send message", success: false })
 	}
 }
 
@@ -54,11 +60,12 @@ const getMessage = async (req, res) => {
 		const senderId = req.id;
 		const receiverId = req.params.id;
 
-		const conversation = await Conversation.find({
-			participants: {$all: [senderId, receiverId]}
-		});
+		const conversation = await Conversation.findOne({
+			participants: { $all: [senderId, receiverId] }
+		}).populate('messages')
+		// console.log(conversation)
 
-		if(!conversation) return res.status(200).json({success: true, message: []});
+		if (!conversation) return res.status(200).json({ success: true, message: [] });
 
 		return res.status(200).json({
 			success: true,
@@ -66,7 +73,7 @@ const getMessage = async (req, res) => {
 		})
 
 	} catch (error) {
-		return res.status(500).json({message: "Failed to get message", success: false})
+		return res.status(500).json({ message: "Failed to get message", success: false })
 	}
 }
 
