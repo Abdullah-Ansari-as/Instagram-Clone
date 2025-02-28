@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Signup from './components/Signup'
 import MainLayout from './components/MainLayout'
 import Login from './components/Login'
@@ -13,6 +13,8 @@ import { setSocket } from './redux/socketSlice'
 import { setOnlineUsers } from './redux/chatSlice'
 import { setLikeNotification } from './redux/RealTimeNotif'
 import ProtectedRoutes from './components/ProtectedRoutes'
+import Explore from './components/Explore'
+import SeeAllSuggestedUsers from './components/SeeAllSuggestedUsers'
 
 
 const router = createBrowserRouter(
@@ -36,6 +38,14 @@ const router = createBrowserRouter(
         {
           path: "/chat",
           element: <ProtectedRoutes><ChatPage /></ProtectedRoutes>
+        },
+        {
+          path: "/explore/",
+          element: <ProtectedRoutes><Explore /></ProtectedRoutes>
+        },
+        {
+          path: "/explore/suggested-users",
+          element: <ProtectedRoutes><SeeAllSuggestedUsers /></ProtectedRoutes>
         }
       ]
     },

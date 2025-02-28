@@ -12,6 +12,8 @@ const rtnSlice = createSlice({
 				state.likeNotification.push(action.payload);
 			} else if(action.payload.type === 'dislike') {
 				state.likeNotification = state.likeNotification.filter((item) => item.userId !== action.payload.userId);
+			} else if(Array.isArray(action.payload)) {
+				// alert("work") // later 
 			}
 		}
 	}

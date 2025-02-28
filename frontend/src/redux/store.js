@@ -27,7 +27,7 @@ const rootReducer = combineReducers({
 	post: postSlice,
 	socketio: socketSlice,
 	chat: chatSlice,
-	realTimeNotification: rtnSlice
+	realTimeNotification: rtnSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

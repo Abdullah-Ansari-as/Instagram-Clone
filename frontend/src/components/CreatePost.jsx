@@ -11,7 +11,7 @@ import axios from 'axios';
 import { setPosts } from '@/redux/postSlice';
 import { setUserProfile } from '@/redux/authSlice';
 
-function CreatePost({ open, setOpen }) {
+function CreatePost({ open, setOpen }) { 
 
 	const [file, setFile] = useState("");
 	const [caption, setCaption] = useState("");

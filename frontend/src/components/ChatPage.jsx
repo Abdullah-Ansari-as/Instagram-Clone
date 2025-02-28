@@ -3,30 +3,33 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { setSelectedUser } from '@/redux/authSlice';
 import { Button } from './ui/button';
-import { MessageCircleCode } from 'lucide-react';
+import { MessageCircleCode, UserIcon } from 'lucide-react';
 import Messages from './Messages';
 import axios from 'axios';
 import { setMessages } from '@/redux/chatSlice';
+import { Link, useNavigate } from 'react-router-dom';
 
 function ChatPage() {
 	const [textMessage, setTextMessage] = useState("")
-	const { user, suggestedUsers, selectedUser } = useSelector(store => store.auth); 
-	const {onlineUsers, messages} = useSelector(store => store.chat)
+	const { user, suggestedUsers, selectedUser } = useSelector(store => store.auth);
+	const { onlineUsers, messages } = useSelector(store => store.chat)
 	// console.log(onlineUsers) 
 	// console.log(messages)
+	// console.log(selectedUser)
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const sendMessageHandler = async (receiverId) => {
 		// console.log(receiverId)
 		try {
-			const res = await axios.post(`http://localhost:3000/api/v1/messages/send/${receiverId}`, {textMessage}, {
-				headers:{
+			const res = await axios.post(`http://localhost:3000/api/v1/messages/send/${receiverId}`, { textMessage }, {
+				headers: {
 					'Content-Type': 'application/json'
 				},
 				withCredentials: true
 			});
 			// console.log(res)
-			if(res.data.success) {
+			if (res.data.success) {
 				dispatch(setMessages([...messages, res.data.newMessage]));
 				setTextMessage("");
 			}
@@ -41,17 +44,30 @@ function ChatPage() {
 		}
 	}, [])
 
+	const selectedUserHandler = (user) => {
+		// console.log(user)
+		dispatch(setSelectedUser(user));
+	}
+
 	return (
 		<div className='flex ml-[20%] h-screen'>
 			<section className='w-full md:w-1/4 my-8'>
-				<h1 className='font-bold mb-8 px-3 text-xl'>{user?.username}</h1>
+				<Link to={`/profile/${user?._id}`}><h1 className='font-bold mb-8 px-3 text-xl'>{user?.username}</h1></Link>
 				{/* <hr className='mb-4 border-gray-300' /> */}
-				<div className="overflow-y-auto h-[80vh]">
+				<div className="h-[80vh] overflow-y-auto
+									[&::-webkit-scrollbar]:w-2
+									[&::-webkit-scrollbar-track]:rounded-full
+									[&::-webkit-scrollbar-track]:bg-gray-100
+									[&::-webkit-scrollbar-thumb]:rounded-full
+									[&::-webkit-scrollbar-thumb]:bg-gray-300
+									dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+									dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
 					{
 						suggestedUsers.map((user) => {
+							// console.log(user)
 							const isOnline = onlineUsers.includes(user._id);
 							return (
-								<div onClick={() => dispatch(setSelectedUser(user))} className='flex gap-3 items-center p-3 hover:bg-gray-50 cursor-pointer w-60 rounded'>
+								<div onClick={() => selectedUserHandler(user)} className='flex gap-3 items-center p-3 hover:bg-gray-50 cursor-pointer w-60 rounded'>
 									<Avatar className='w-14 h-14'>
 										<AvatarImage src={user?.profilePicture} />
 										<AvatarFallback>CN</AvatarFallback>
@@ -79,7 +95,7 @@ function ChatPage() {
 								<span className='font-semibold'>{selectedUser?.username}</span>
 							</div>
 						</div>
-						<Messages selectedUser={selectedUser}/> 
+						<Messages selectedUser={selectedUser} />
 						<div className="flex items-center p-4 border-t border-t-gray-300">
 							<input value={textMessage} onChange={(e) => setTextMessage(e.target.value)} type="text" className='flex-1 mr-2 focus-visible:ring-transparent' placeholder='Messages...' />
 							<Button onClick={() => sendMessageHandler(selectedUser?._id)}>Send</Button>

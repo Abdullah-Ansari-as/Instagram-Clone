@@ -140,7 +140,48 @@ const getProfile = async (req, res) => {
 			});
 		}
 
-		const user = await User.findById(userId).populate({ path: 'posts', createdAt: -1 }).populate('bookmarks');
+		// const user = await User.findById(userId).populate({ path: 'posts', populate:{path: "comments", select: "text author", populate:{path: "author", select: "username profilePicture"}}, createdAt: -1 }).select("-password").populate("bookmarks");
+		// same uper wali line But with formated text:)
+		const user = await User.findById(userId) // Find the user by userId
+			.populate({
+				path: "posts", // Populate the 'posts' field in the User model
+				populate: [ // imp ---> use array inside the populate option to populate multiple fields at the same level.
+					{
+						path: "author",
+						select: "username profilePicture followers"
+					},
+					{
+						path: "comments", // Populate the 'comments' field inside each post
+						select: "text author", // Select only 'text' and 'author' fields from comments
+						populate: {
+							path: "author", // Further populate the 'author' field inside each comment
+							select: "username profilePicture", // Select only 'username' and 'profilePicture' fields of the author
+						},
+					},
+				],
+				options: { sort: { createdAt: -1 } }, // Sort posts by createdAt (newest first)
+			})
+			.select("-password") // Exclude the 'password' field from the user data
+			.populate({
+				path: "bookmarks",
+				populate: [
+					{
+						path: "author",
+						select: "username profilePicture followers"
+					},
+					{
+						path: "comments",
+						select: "text author",
+						populate: {
+							path: "author",
+							select: "username profilePicture"
+						}
+					}
+				]
+			}); // Populate the 'bookmarks' field in the User model
+
+
+		// console.log(user)
 		if (!user) {
 			return res.status(404).json({
 				message: "No user found",
@@ -184,7 +225,7 @@ const editProfile = async (req, res) => {
 			}
 		}
 
-		const user = await User.findById(userId ).select("-password");
+		const user = await User.findById(userId).select("-password");
 		if (!user) {
 			return res.status(404).json({
 				message: "User not found",
@@ -194,9 +235,9 @@ const editProfile = async (req, res) => {
 		// console.log(user.bio)
 		// console.log(user.gender)
 
-		if(bio) user.bio = bio;
-		if(gender) user.gender = gender;
-		if(localFilePath) user.profilePicture = cloudResponse;
+		if (bio) user.bio = bio;
+		if (gender) user.gender = gender;
+		if (localFilePath) user.profilePicture = cloudResponse;
 
 		await user.save();
 
@@ -239,15 +280,74 @@ const getSuggestedUser = async (req, res) => {
 	}
 }
 
+// const followOrUnfollow = async (req, res) => {
+// 	try {
+// 		const followKrnaWala = req.id;
+// 		const jisKoFollowKruga = req.params.id;
+// 		if (!jisKoFollowKruga) {
+// 			return res.status(404).json({
+// 				message: "Following User id is required"
+// 			})
+// 		};
+
+// 		if (followKrnaWala === jisKoFollowKruga) {
+// 			return res.status(400).json({
+// 				message: "You cannot follow/unfollow yourself",
+// 				success: false
+// 			});
+// 		}
+
+// 		const user = await User.findById(followKrnaWala);
+// 		const targetUser = await User.findById(jisKoFollowKruga);
+// 		if (!user) {
+// 			return res.status(404).json({
+// 				message: "User not found"
+// 			})
+// 		}
+// 		if (!targetUser) {
+// 			return res.status(404).json({
+// 				message: "User not found"
+// 			})
+// 		}
+
+// 		const isFollowing = user.following.includes(jisKoFollowKruga);
+// 		if (isFollowing) {
+// 			// unfollow logic
+// 			await Promise.all([
+// 				User.updateOne({ _id: followKrnaWala }, { $pull: { following: jisKoFollowKruga } }),
+// 				User.updateOne({ _id: jisKoFollowKruga }, { $pull: { followers: followKrnaWala } })
+// 			]);
+// 			return res.status(200).json({ message: "unfollowed successfully", success: true });
+// 		} else {
+// 			// follow logic
+// 			await Promise.all([
+// 				User.updateOne({ _id: followKrnaWala }, { $push: { following: jisKoFollowKruga } }),
+// 				User.updateOne({ _id: jisKoFollowKruga }, { $push: { followers: followKrnaWala } })
+// 			]);
+// 			return res.status(200).json({ message: "followed successfully", success: true });
+// 		}
+
+// 	} catch (error) {
+// 		return res.status(500).json({
+// 			message: "fail to follow/unfollow a user",
+// 			success: false
+// 		})
+// 	}
+// }
+
 const followOrUnfollow = async (req, res) => {
 	try {
-		const followKrnaWala = req.id;
-		const jisKoFollowKruga = req.params.id;
+		const followKrnaWala = req.id; // The user who is following/unfollowing
+		const jisKoFollowKruga = req.params.id; // The target user
+
 		if (!jisKoFollowKruga) {
 			return res.status(404).json({
-				message: "Following User id is required"
-			})
-		};
+				message: "Following User ID is required",
+				success: false
+			});
+		}
+
+		// console.log(followKrnaWala, jisKoFollowKruga)
 
 		if (followKrnaWala === jisKoFollowKruga) {
 			return res.status(400).json({
@@ -258,41 +358,54 @@ const followOrUnfollow = async (req, res) => {
 
 		const user = await User.findById(followKrnaWala);
 		const targetUser = await User.findById(jisKoFollowKruga);
-		if (!user) {
+
+		if (!user || !targetUser) {
 			return res.status(404).json({
-				message: "User not found"
-			})
-		}
-		if (!targetUser) {
-			return res.status(404).json({
-				message: "User not found"
-			})
+				message: "User not found",
+				success: false
+			});
 		}
 
 		const isFollowing = user.following.includes(jisKoFollowKruga);
-		if (isFollowing) {
-			// unfollow logic
-			await Promise.all([
-				User.updateOne({ _id: followKrnaWala }, { $pull: { following: jisKoFollowKruga } }),
-				User.updateOne({ _id: jisKoFollowKruga }, { $pull: { followers: followKrnaWala } })
-			]);
-			return res.status(200).json({ message: "unfollowed successfully", success: true });
-		} else {
-			// follow logic
-			await Promise.all([
-				User.updateOne({ _id: followKrnaWala }, { $push: { following: jisKoFollowKruga } }),
-				User.updateOne({ _id: jisKoFollowKruga }, { $push: { followers: followKrnaWala } })
-			]);
-			return res.status(200).json({ message: "followed successfully", success: true });
-		}
 
+		let updatedUser, updatedTargetUser;
+
+		if (isFollowing) {
+			// Unfollow logic
+			[updatedUser, updatedTargetUser] = await Promise.all([
+				User.findByIdAndUpdate(followKrnaWala, { $pull: { following: jisKoFollowKruga } }, { new: true }),
+				User.findByIdAndUpdate(jisKoFollowKruga, { $pull: { followers: followKrnaWala } }, { new: true })
+			]);
+
+			return res.status(200).json({
+				message: "Unfollowed successfully",
+				success: true,
+				userfl: updatedUser.followers, // Updated followers array
+				userufl: updatedUser.following // Updated following array
+			});
+		} else {
+			// Follow logic
+			[updatedUser, updatedTargetUser] = await Promise.all([
+				User.findByIdAndUpdate(followKrnaWala, { $push: { following: jisKoFollowKruga } }, { new: true }),
+				User.findByIdAndUpdate(jisKoFollowKruga, { $push: { followers: followKrnaWala } }, { new: true })
+			]);
+
+			return res.status(200).json({
+				message: "Followed successfully",
+				success: true,
+				userfl: updatedUser.followers, // Updated followers array
+				userufl: updatedUser.following // Updated following array
+			});
+		}
 	} catch (error) {
+		console.error("Follow/Unfollow Error:", error);
 		return res.status(500).json({
-			message: "fail to follow/unfollow a user",
+			message: "Failed to follow/unfollow a user",
 			success: false
-		})
+		});
 	}
-}
+};
+
 
 
 

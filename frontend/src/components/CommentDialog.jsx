@@ -10,17 +10,19 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { setPosts } from '@/redux/postSlice'
 
-function CommentDialog({ open, setOpen }) {
+function CommentDialog({ openCommentDialog, setOpenCommentDialog, isFollowing, followUnfollowHandler }) {
 
-  const { selectedPost, posts } = useSelector(store => store.post)
-  // console.log(selectedPost)
+  const { selectedPost, posts } = useSelector(store => store.post);
+  console.log(selectedPost)
 
   const [text, setText] = useState("");
   const [comment, setComment] = useState([]);
   // console.log(comment)
+  const [isBookMarked, setIsBookMarked] = useState(false)
+
 
   useEffect(() => {
-    if(selectedPost) {
+    if (selectedPost) {
       setComment(selectedPost?.comments)
     }
   }, [selectedPost])
@@ -35,11 +37,11 @@ function CommentDialog({ open, setOpen }) {
       setText("");
     }
   }
- 
+
 
   const handleSubmitComment = async (event) => {
     event.preventDefault();
-    try { 
+    try {
       // console.log(selectedPost._id)
       const res = await axios.post(`http://localhost:3000/api/v1/posts/${selectedPost._id}/comment`, { text }, {
         headers: {
@@ -73,13 +75,25 @@ function CommentDialog({ open, setOpen }) {
         console.log('Error:', error.message);
       }
     }
+  };
+
+  const bookmarkHandler = async () => {
+    try {
+      const res = await axios.get(`http://localhost:3000/api/v1/posts/${selectedPost._id}/bookmark`, { withCredentials: true });
+      if (res.data.success) {
+        setIsBookMarked(!isBookMarked)
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
-    <Dialog open={open} className=''>
+    <Dialog open={openCommentDialog}>
       <DialogContent
         className='max-w-2xl p-0 flex flex-col  w-[70vw] md:w-[80vw] h-[80vh] '
-        onInteractOutside={() => setOpen(false)}
+        onInteractOutside={() => setOpenCommentDialog(false)}
       >
         <div className="flex flex-col md:flex-row flex-1 h-[32rem]">
           <div className='w-full md:w-1/2'>
@@ -92,14 +106,14 @@ function CommentDialog({ open, setOpen }) {
           <div className="w-full md:w-1/2 flex flex-col bg-white rounded-r-[9px]">
             <div className="flex items-center justify-between p-2 border-b">
               <div className='flex items-center gap-3'>
-                <Link>
+                <Link to={`/profile/${selectedPost?.author._id}`} >
                   <Avatar>
                     <AvatarImage src={selectedPost?.author?.profilePicture} />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                 </Link>
                 <div>
-                  <Link className='font-semibold text-sm mr-2'>{selectedPost?.author?.username}</Link>
+                  <Link to={`/profile/${selectedPost?.author._id}`} className='font-semibold text-sm mr-2'>{selectedPost?.author?.username}</Link>
                   {/* <span className='text-xs text-gray-500'>Bio here</span> */}
                 </div>
               </div>
@@ -112,13 +126,24 @@ function CommentDialog({ open, setOpen }) {
                 </DialogTrigger>
 
                 <DialogContent className='flex flex-col items-center text-center text-sm lg:w-[28rem] w-72 bg-white border rounded-[20px] gap-0 px-0' >
-                  <Button variant='ghost' className=" rounded-xl text-red-500 hover:text-red-500 font-bold w-fit my-2">Unfollow </Button><hr className='w-full color' />
-                  <Button variant='ghost' className=" rounded-xl font-bold w-fit my-2">Not interested </Button><hr className='w-full color' />
-                  <Button variant='ghost' className=" rounded-xl font-bold w-fit my-2">Add to favorites </Button><hr className='w-full color' />
-                  <Button variant='ghost' className=" rounded-xl font-bold w-fit my-2">go to profile</Button><hr className='w-full color' />
-                  <Button variant='ghost' className=" rounded-xl font-bold w-fit my-2">Share to... </Button><hr className='w-full color' />
-                  <Button variant='ghost' className=" rounded-xl font-bold w-fit my-2">Copy </Button><hr className='w-full color' />
-                  <Button variant='ghost' className=" rounded-xl font-bold w-fit mt-2 mb-0">cancel </Button>
+                  {
+                    isFollowing ? (
+                      <Button variant='ghost' className=" rounded-xl text-red-500 hover:text-red-500 font-bold w-fit my-2" onClick={followUnfollowHandler}>Unfollow </Button>
+                    ) : (
+                      <Button variant='ghost' className=" rounded-xl text-[#3BADF8] hover:text-[#2a8aca] font-bold w-fit my-2" onClick={followUnfollowHandler}>Follow </Button>
+                    )
+                  }
+                  <hr className='w-full color' />
+                  {
+                    isBookMarked ? (
+                      <Button variant='ghost' className=" rounded-xl font-bold w-fit my-2" onClick={bookmarkHandler} >Remove to favorites </Button>
+                    ) : (
+                      <Button variant='ghost' className=" rounded-xl font-bold w-fit my-2" onClick={bookmarkHandler} >Add to favorites </Button>
+                    )
+                  }
+                  <hr className='w-full color' />
+                  <Button variant='ghost' className=" rounded-xl font-bold w-fit my-2"><Link to={`/profile/${selectedPost?.author._id}`}>go to profile</Link></Button><hr className='w-full color' />
+                  <Button variant='ghost' className=" rounded-xl font-bold w-fit mt-2 mb-0" onClick={() => setOpenCommentDialog(false)}>cancel </Button>
                 </DialogContent>
 
               </Dialog>
@@ -127,10 +152,14 @@ function CommentDialog({ open, setOpen }) {
               {/* Comments and content go here */}
               <p className='text-sm text-gray-600'>
                 {
-                  comment && comment.slice().reverse().map((comment) => {
-                    // console.log(comment);
-                    return <Comment key={comment._id} comment={comment} />
-                  })
+                  comment.length > 0 ? (
+                    comment.slice().reverse().map((comment) => {
+                      // console.log(comment);
+                        return  <Comment key={comment._id} comment={comment} />                    
+                    })
+                  ) : (
+                    <p className='h-[50vh] flex justify-center items-center'>Be a first comment</p>
+                  )
                 }
               </p>
             </div>

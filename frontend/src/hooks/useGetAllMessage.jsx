@@ -13,7 +13,7 @@ const useGetAllMessage = () => {
 			try {
 				// console.log("before")
 				const res = await axios.get(`http://localhost:3000/api/v1/messages/all/${selectedUser?._id}`, { withCredentials: true });
-				console.log(res)
+				// console.log(res)
 				if (res.data.success) {
 					dispatch(setMessages(res.data.messages))
 				}

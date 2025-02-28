@@ -3,12 +3,12 @@ import express, { urlencoded } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser"; 
 import connectDB from './utils/db.js';
-import { app, server, io } from './socket/socket.js';
-// const app = express();
+import { app, server, io } from './socket/socket.js'; 
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(urlencoded({extended: true}));
+app.use(urlencoded({extended: true})); 
+
 const corsOptions = {
 	origin: "http://localhost:5173",
 	credentials: true

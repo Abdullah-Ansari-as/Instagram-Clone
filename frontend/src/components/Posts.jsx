@@ -7,7 +7,7 @@ function Posts() {
 
 	// directly [array] a rha hai posts ka "postSlice.js" file "initialState" me se
 	const {posts} = useSelector(store => store.post);  
-	// console.log(posts) 	
+	// console.log(posts)
 	return (
 		<div>
 			{

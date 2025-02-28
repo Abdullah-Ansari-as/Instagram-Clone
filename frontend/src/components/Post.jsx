@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
 	Dialog,
 	DialogContent,
 	DialogTrigger,
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
-import { Bookmark, MessageCircle, MoreHorizontal, Send } from 'lucide-react';
+import { MessageCircle, MoreHorizontal, Send } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -16,7 +16,6 @@ import axios from 'axios';
 import { setPosts, setSelectedPost } from '@/redux/postSlice';
 import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 import { Link } from 'react-router-dom';
-
 
 
 
@@ -34,13 +33,14 @@ function Post({ post }) {
 	const dispatch = useDispatch()
 
 	const [text, setText] = useState("");
-	const [open, setOpen] = useState(false);
+	const [openCommentDialog, setOpenCommentDialog] = useState(false);
 	const [liked, setLiked] = useState(post.likes.includes(user?._id) || false);
 	const [postLike, setPostLike] = useState(post.likes.length);
 	const [isAnimating, setIsAnimating] = useState(false);
 	const [comment, setComment] = useState(post.comments);
 	// console.log(comment.length)
 	const [isBookMarked, setIsBookMarked] = useState(false)
+	const [isFollowing, setIsFollowing] = useState(false)
 
 	const handlePostComment = (e) => {
 		const inputText = e.target.value;
@@ -143,8 +143,29 @@ function Post({ post }) {
 	}
 
 
+
+	useEffect(() => {
+		setIsFollowing(post?.author.followers.includes(user?._id))
+	}, [post?.author.followers, user])
+
+	const followUnfollowHandler = async () => {
+		setIsFollowing((prev) => !prev)
+		try {
+			const res = await axios.post(`http://localhost:3000/api/v1/users/followorUnfollow/${post?.author._id}`, {}, { withCredentials: true });
+			// console.log(res) 
+			if (res.data.success) {
+				toast.success(res.data.message);
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+
 	return (
+		
 		<div className='my-8 w-full max-w-sm mx-auto'>
+			<hr className='my-3'/>
 			<div className="flex items-center justify-between mx-3 640px:mx-0">
 				<div className="flex items-center gap-2">
 
@@ -169,8 +190,14 @@ function Post({ post }) {
 						{
 							user && user?._id !== post.author?._id && (
 								<>
-									<Button variant='ghost' className=" rounded-xl text-red-500 hover:text-red-500 font-bold w-fit my-2">Report </Button><hr className='w-full ' />
-									<Button variant='ghost' className=" rounded-xl text-red-500 hover:text-red-500 font-bold w-fit my-2">UnFollow </Button><hr className='w-full ' />
+									{
+										isFollowing ? (
+											<Button variant='ghost' className=" rounded-xl text-red-500 hover:text-red-500 font-bold w-fit my-2" onClick={followUnfollowHandler}>Unfollow </Button>
+										) : (
+											<Button variant='ghost' className=" rounded-xl text-[#3BADF8] hover:text-[#2a8aca] font-bold w-fit my-2" onClick={followUnfollowHandler}>Follow </Button>
+										)
+									}
+									<hr className='w-full' />
 								</>
 							)
 						}
@@ -178,14 +205,24 @@ function Post({ post }) {
 						{
 							user && user?._id === post.author?._id && (
 								<>
-									<Button variant='ghost' className=" rounded-xl text-red-500 hover:text-red-500 font-bold w-fit mt-2 mb-0" onClick={deletePostHandler}>Delete </Button><hr className='w-full' />
-									<Button variant='ghost' className=" rounded-xl font-bold w-fit my-2">Edit</Button><hr className='w-full ' />
+									<Button variant='ghost' className="rounded-xl text-red-500 hover:text-red-500 font-bold w-fit mt-2 mb-0" onClick={deletePostHandler}>Delete </Button><hr className='w-full' />
 								</>
 							)
 						}
-						<Button variant='ghost' className=" rounded-xl font-bold w-fit my-2">Add to favorites </Button><hr className='w-full ' />
-						<Button variant='ghost' className=" rounded-xl font-bold w-fit my-2">Go to post</Button><hr className='w-full ' />
-						<Button variant='ghost' className=" rounded-xl font-bold w-fit my-2">About this account</Button>
+
+						{
+							isBookMarked ? (
+								<Button variant='ghost' className=" rounded-xl font-bold w-fit my-2" onClick={bookmarkHandler} >Remove to favorites </Button>
+							) : (
+								<Button variant='ghost' className=" rounded-xl font-bold w-fit my-2" onClick={bookmarkHandler} >Add to favorites </Button>
+							)
+						}
+						<hr className='w-full' />
+						<Button variant='ghost' className=" rounded-xl font-bold w-fit my-2" onClick={() => {
+							dispatch(setSelectedPost(post))
+							setOpenCommentDialog(true)
+						}}>Go to post</Button><hr className='w-full ' />
+						<Button variant='ghost' className=" rounded-xl font-bold w-fit my-2"><Link to={`/profile/${post?.author._id}`}>About this account</Link></Button>
 					</DialogContent>
 
 				</Dialog>
@@ -208,7 +245,7 @@ function Post({ post }) {
 
 						<MessageCircle onClick={() => {
 							dispatch(setSelectedPost(post))
-							setOpen(true)
+							setOpenCommentDialog(true)
 						}} className='cursor-pointer hover:text-gray-600 size-5 md:size-6' />
 						<Send className='cursor-pointer hover:text-gray-600 size-5 md:size-6' />
 					</div>
@@ -229,11 +266,11 @@ function Post({ post }) {
 				{
 					comment.length > 0 && <span onClick={() => {
 						dispatch(setSelectedPost(post))
-						setOpen(true)
+						setOpenCommentDialog(true)
 					}} className='cursor-pointer text-sm text-gray-400'>view all {comment.length} comments</span>
 				}
 
-				<CommentDialog open={open} setOpen={setOpen} />
+				<CommentDialog openCommentDialog={openCommentDialog} setOpenCommentDialog={setOpenCommentDialog} isFollowing={isFollowing} setIsFollowing={setIsFollowing} followUnfollowHandler={followUnfollowHandler}/>
 
 				<div className='flex items-center justify-between'>
 					<input

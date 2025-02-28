@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 
 function Signup() {
 
-	const {user} = useSelector(store => store.auth);
+	const { user } = useSelector(store => store.auth);
 
 	const [input, setInput] = useState({
 		username: "",
@@ -35,7 +35,7 @@ function Signup() {
 				},
 				withCredentials: true
 			});
-			if(res.data.success) {
+			if (res.data.success) {
 				navigate('/login')
 				toast.success(res.data.message);
 				setInput({
@@ -46,7 +46,7 @@ function Signup() {
 			}
 			console.log(res)
 		} catch (error) {
-			console.log("Signup handler error"+ error)
+			console.log("Signup handler error" + error)
 			toast.error(error.response.data.message);
 		} finally {
 			setLoading(false)
@@ -54,16 +54,19 @@ function Signup() {
 	}
 
 	useEffect(() => {
-			if(user) {
-				navigate("/")
-			}
-		}, [])
+		if (user) {
+			navigate("/")
+		}
+	}, [])
 
 	return (
 		<div className='flex justify-center items-center w-screen h-screen '>
 			<form onSubmit={signupHandler} className="shadow-xl p-8 flex flex-col gap-5">
 				<div className="my-4">
-					<h1 className='text-xl text-center font-bold pb-3'>Logo</h1>
+					<img
+						className='lg:block pl-4 w-44 flex justify-center m-auto'
+						src="/instaLogo.png"
+						alt="Logo" />
 					<p className='text-sm text-center'>SingUp to see photos and videos for your friends</p>
 				</div>
 				<div className="">
@@ -100,13 +103,13 @@ function Signup() {
 				{
 					loading ? (
 						<Button>
-							<Loader2 className='h-4 w-4 animate-spin'/>
+							<Loader2 className='h-4 w-4 animate-spin' />
 							Please wait
 						</Button>
 					) : (
 						<Button type="submit" className="bg-slate-800 hover:bg-slate-900 rounded text-white text-md">Signup</Button>
 					)
-				 }
+				}
 				<span className='text-center'>Already have an account? <Link to='/login' className='text-blue-600'>Login</Link></span>
 			</form>
 		</div>
