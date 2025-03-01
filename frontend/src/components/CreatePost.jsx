@@ -18,7 +18,7 @@ function CreatePost({ open, setOpen }) {
 	const [imgPreview, setImgpreview] = useState("");
 	const [loading, setLoading] = useState(false); 
 
-	const {user, userProfile} = useSelector(state => state.auth);
+	const {user, userProfile} = useSelector(store => store.auth);
 	// console.log(user)
 	// console.log(userProfile.posts)
 	const {posts} = useSelector(store => store.post);
@@ -54,7 +54,7 @@ function CreatePost({ open, setOpen }) {
 			});
 			if(res.data.success) {
 				// console.log(res.data.post)
-				// update posts array in "userProfile" => a redux state variable
+				// real time update posts array in "userProfile" => a redux state variable
 				if(user._id === res.data.post.author._id) {
 					const currentPosts = userProfile.posts;
 					const updatedPostsArray = [...currentPosts, res.data.post]
@@ -77,7 +77,7 @@ function CreatePost({ open, setOpen }) {
 
 	return (
 		<Dialog open={open} className=''>
-			<DialogContent onInteractOutside={() => setOpen(false)} className='w-[18rem] md:w-[26rem] rounded-xl gap-0 bg-white pb-5 border-none sm:border-none '>
+			<DialogContent onInteractOutside={() => {setOpen(false), setImgpreview("")}} className='w-[18rem] md:w-[26rem] rounded-xl gap-0 bg-white pb-5 border-none sm:border-none '>
 				<DialogHeader className='sm:text-center font-semibold text-lg py-3'>
 					Create new Post
 				</DialogHeader>
@@ -90,8 +90,8 @@ function CreatePost({ open, setOpen }) {
 							<AvatarFallback>CN</AvatarFallback>
 						</Avatar>
 						<div>
-							<h1 className='font-semibold text-xs'>username</h1>
-							<span className='text-gray-600 text-xs'>Bio here...</span>
+							<h1 className='font-semibold text-xs'>{user?.username}</h1>
+							<span className='text-gray-600 text-xs'>{user?.bio}</span>
 						</div>
 					</div>
 

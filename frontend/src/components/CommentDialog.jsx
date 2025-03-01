@@ -13,7 +13,7 @@ import { setPosts } from '@/redux/postSlice'
 function CommentDialog({ openCommentDialog, setOpenCommentDialog, isFollowing, followUnfollowHandler }) {
 
   const { selectedPost, posts } = useSelector(store => store.post);
-  console.log(selectedPost)
+  // console.log(selectedPost)
 
   const [text, setText] = useState("");
   const [comment, setComment] = useState([]);
