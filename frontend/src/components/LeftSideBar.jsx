@@ -1,5 +1,5 @@
 import { Heart, Home, LogOut, MessageCircle, Search, PlusSquare, TrendingUp } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { toast } from 'sonner'
 import axios from 'axios'
@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setAuthUser } from '@/redux/authSlice'
 import CreatePost from './CreatePost'
-import { setPosts, setSelectedPost } from '@/redux/postSlice' 
+import { setPosts, setSelectedPost } from '@/redux/postSlice'
 import { Button } from './ui/button';
 import SearchOpen from './SearchOpen'
 import NotificationOpen from './NotificationOpen'
@@ -20,6 +20,8 @@ function LeftSideBar() {
 	// console.log(open)
 	const [searchOpen, setSearchOpen] = useState(false)
 	const [openNotifications, setOpenNotifications] = useState(false)
+
+	const [storyCircle, setStoryCircle] = useState(false)
 
 	const navigate = useNavigate()
 	const { likeNotification } = useSelector(store => store.realTimeNotification)
@@ -72,18 +74,31 @@ function LeftSideBar() {
 		{ icon: <PlusSquare className='w-7 h-7' />, text: "Create" },
 		{
 			icon: (
-				<Avatar className="w-6 h-6">
-					<AvatarImage src={user?.profilePicture} />
-					<AvatarFallback>CN</AvatarFallback>
-				</Avatar>
+				<div className={`${storyCircle && 'p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full'}`}>
+					<Avatar className="w-7 h-7 border-2 border-white">
+						<AvatarImage src={user?.profilePicture} />
+						<AvatarFallback>CN</AvatarFallback>
+					</Avatar>
+				</div >
 			), text: "Profile"
 		},
 		{ icon: <LogOut />, text: "Logout" },
 	]
 
 
+	const { loggedInUserStory } = useSelector(store => store.story)
+	// console.log(stories)
+	// console.log(loggedInUserStory)
+
+	useEffect(() => {
+		if (loggedInUserStory) {
+			setStoryCircle(loggedInUserStory)
+		}
+	}, [loggedInUserStory])
+
+
 	return (
-		<div className='sm:flex px-4 w-20 1120px:w-60 lg:w-48 shrink hidden border-r border-gray-300 h-screen fixed top-0 z-10 left-0 '> 
+		<div className='sm:flex px-4 w-20 1120px:w-60 lg:w-48 shrink hidden border-r border-gray-300 h-screen fixed top-0 z-10 left-0 '>
 			<div className="flex flex-col">
 
 				{/* Picture Shown on large screens */}
@@ -95,7 +110,7 @@ function LeftSideBar() {
 									className='block lg:my-3 my-3 object-cover lg:mt-5 mt-4 md:w-[40px] '
 									src="/instaLogoForSm.png"
 									alt="Logo" />
-							) : ( 
+							) : (
 								<img
 									className='hidden lg:block mt-3 pl-4 w-[120px]'
 									src="/instaLogo.png"
@@ -107,10 +122,10 @@ function LeftSideBar() {
 
 				{/* Picture Shown on small screens */}
 				{
-					searchOpen || openNotifications ? "" : <Link to='/' className={`flex items-center justify-center ${ searchOpen || openNotifications ? 'mt-2' : ''}`}><img
-							className='block lg:hidden lg:my-3 my-3 object-cover lg:mt-5 mt-4 lg:pl-4 md:w-[40px]'
-							src="/instaLogoForSm.png"
-							alt="Logo" /></Link>
+					searchOpen || openNotifications ? "" : <Link to='/' className={`flex items-center justify-center ${searchOpen || openNotifications ? 'mt-2' : ''}`}><img
+						className='block lg:hidden lg:my-3 my-3 object-cover lg:mt-5 mt-4 lg:pl-4 md:w-[40px]'
+						src="/instaLogoForSm.png"
+						alt="Logo" /></Link>
 				}
 				{
 					sideBarItems.map((item, ind) => {

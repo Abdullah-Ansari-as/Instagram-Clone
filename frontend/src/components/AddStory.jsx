@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { useDispatch, useSelector } from 'react-redux';
 import { FiPlusCircle } from "react-icons/fi";
@@ -9,15 +9,26 @@ import { toast } from 'sonner';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 import useGetStories from '@/hooks/useGetStories';
-import { setStories } from '@/redux/storySlice';
+import { setLoggedInUserStory, setStories } from '@/redux/storySlice';
+import ViewStory from './ViewStory';
 
 function AddStory() {
-	useGetStories();
+	useEffect(() => {
+		const fetchStories = async () => {
+		  await useGetStories(); // Call the function properly
+		};
+	  
+		fetchStories();
+	  }, []);
 
 	const { user } = useSelector(store => store.auth);
 	// console.log(user)
 	const { stories } = useSelector(store => store.story);
-	console.log(stories)
+	// console.log(stories)
+
+
+	const [openStatus, setOpenStatus] = useState(false);
+	const [selectedUserStory, setSelectedUserStory] = useState(null);
 
 	const storyRef = useRef();
 	const dispatch = useDispatch();
@@ -26,10 +37,19 @@ function AddStory() {
 	const [file, setFile] = useState("");
 	const [imgPreview, setImgpreview] = useState("");
 	const [loading, setLoading] = useState(false);
+	// console.log(openStatus)
+
+
+	// const [storyId, setStoryId] = useState("");
+	// const [loggedInUserId, setLoggedInUserId] = useState("")
+	// console.log(storyId)
+
+	useEffect(() => {
+		setOpenStatus(false)
+	}, [user?._id])
 
 	const fileChangeHandler = async (e) => {
 		const file = e.target.files?.[0];
-		console.log(file)
 		if (file) {
 			setFile(file);
 			const dataUrl = await readFileAsDataURL(file);
@@ -51,7 +71,7 @@ function AddStory() {
 				setOpen(false)
 				setImgpreview("")
 
-			} else { 
+			} else {
 
 				setLoading(true)
 				const res = await axios.post('http://localhost:3000/api/v1/story/upload/story', formData, {
@@ -77,17 +97,83 @@ function AddStory() {
 		}
 	}
 
+
+	// true if loggedin user uploaded story. otherwise fasle.
+	const isUploadedStory = stories?.some(story => story.author._id === user?._id);
+	if (isUploadedStory) {
+		dispatch(setLoggedInUserStory(true))
+	} else {
+		dispatch(setLoggedInUserStory(false))
+	}
+	// console.log(isUploadedStory)
+
+
+	// Find logged-in user's story
+	const loggedInUserStory = stories.find(story => story.author._id === user?._id);
+
+	// Find other users' stories
+	const otherUsersStories = stories.filter(story => story.author._id !== user?._id);
+
+	// Combine: Logged-in user first, then others
+	const sortedStories = loggedInUserStory ? [loggedInUserStory, ...otherUsersStories] : otherUsersStories;
+
+	// console.log(selectedUserStory)
 	return (
 		<>
 
 			<div className="w-[37rem] flex items-center">
-				<div onClick={() => { setOpen(true), setImgpreview("") }} className='flex items-end cursor-pointer' title='Upload your story'>
-					<Avatar className="w-[70px] h-[70px]">
-						<AvatarImage className="bg-gray-200 grayscale-[10%] hover:grayscale-[40%]" src={user?.profilePicture} />
-						<AvatarFallback className="bg-gray-200 text-white">CN</AvatarFallback>
-					</Avatar>
-					<FiPlusCircle className='bg-white rounded-full relative right-5 h-4 w-4' />
+
+				{
+					!isUploadedStory && <div
+						onClick={!isUploadedStory ? () => { setOpen(true); setImgpreview("") } : () => { setOpenStatus(true) }}
+						className={`flex items-end cursor-pointer relative bottom-[11px]`}
+						title='Upload your story'
+					>
+						<div className={`${isUploadedStory && 'p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full'}`}>
+							<Avatar className="w-[66px] h-[66px] group-hover:scale-95 border-2 transition-transform border-white rounded-full">
+								<AvatarImage
+									className="bg-gray-200 grayscale-[10%] hover:grayscale-[40%]"
+									src={user?.profilePicture}
+								/>
+								<AvatarFallback className="bg-gray-200 text-white">CN</AvatarFallback>
+							</Avatar>
+						</div>
+						{
+							isUploadedStory || <FiPlusCircle className='bg-white rounded-full relative right-5 h-4 w-4' />
+						}
+					</div>
+				}
+
+				<div className={`gap-3 flex ${isUploadedStory ? "ml-4" : ""}`}>
+					{sortedStories.map((story) => (
+						<div
+							key={story.author._id}
+							className={`flex items-end cursor-pointer relative bottom-[6px]`}
+							onClick={() => {
+								setSelectedUserStory(story); // Set selected story
+								setOpenStatus(true); // Open dialog
+							}}
+							title='Upload your story'
+						>
+							<div className="flex flex-col items-center">
+								<div className={`${stories && 'p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full'}`}>
+									<Avatar className="w-[66px] h-[66px] group-hover:scale-95 border-2 transition-transform border-white rounded-full">
+										<AvatarImage
+											className="bg-gray-200 grayscale-[10%] hover:grayscale-[40%]"
+											src={story.author.profilePicture}
+											alt={story.author.username}
+										/>
+										<AvatarFallback className="bg-gray-200 text-white">CN</AvatarFallback>
+									</Avatar>
+								</div>
+								<span className='text-xs mt-1 font-normal'>
+									{story?.author.username}
+								</span>
+							</div>
+						</div>
+					))}
 				</div>
+
 			</div>
 
 
@@ -136,6 +222,9 @@ function AddStory() {
 
 				</DialogContent>
 			</Dialog>
+
+			<ViewStory openStatus={openStatus} setOpenStatus={setOpenStatus} selectedUserStory={selectedUserStory} setSelectedUserStory={setSelectedUserStory} />
+
 		</>
 
 	)

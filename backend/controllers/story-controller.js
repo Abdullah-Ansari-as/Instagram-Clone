@@ -48,7 +48,7 @@ const uploadStory = async (req, res) => {
 const getAllStories = async (req, res) => {
 	try {
 		const stories = await Story.find().sort({ createdAt: -1 })
-		.populate({ path: "author", select: "username profilePicture"})
+		.populate({ path: "author", select: "username profilePicture bio"})
 
 		if(!stories) {
 			return res.status(500).json({

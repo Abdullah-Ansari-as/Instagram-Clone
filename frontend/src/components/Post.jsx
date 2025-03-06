@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 import axios from 'axios';
 import { setPosts, setSelectedPost } from '@/redux/postSlice';
 import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 
 
 
@@ -30,6 +30,8 @@ function Post({ post }) {
 	// const { suggestedUsers } = useSelector(store => store.auth);
 	// console.log(suggestedUsers)
 
+	const { stories } = useSelector(store => store.story);
+
 	const dispatch = useDispatch()
 
 	const [text, setText] = useState("");
@@ -40,7 +42,8 @@ function Post({ post }) {
 	const [comment, setComment] = useState(post.comments);
 	// console.log(comment.length)
 	const [isBookMarked, setIsBookMarked] = useState(false)
-	const [isFollowing, setIsFollowing] = useState(false)
+	const [isFollowing, setIsFollowing] = useState(false);
+	const [storyCircle, setStoryCircle] = useState(false)
 
 	const handlePostComment = (e) => {
 		const inputText = e.target.value;
@@ -161,20 +164,33 @@ function Post({ post }) {
 		}
 	}
 
+	const isUploadedStory = stories?.some(story => story.author._id === user?._id);
+
+	const { loggedInUserStory } = useSelector(store => store.story)
+	// console.log(stories)
+	// console.log(loggedInUserStory)
+
+	useEffect(() => {
+		if (loggedInUserStory) {
+			setStoryCircle(loggedInUserStory)
+		}
+	}, [loggedInUserStory])
+
 
 	return (
 
-		
-		<div className='my-8 w-full max-w-sm mx-auto'> 
-			<hr className='my-3'/>
+
+		<div className='my-8 w-full max-w-sm mx-auto'>
 			<div className="flex items-center justify-between mx-3 640px:mx-0">
 				<div className="flex items-center gap-2">
 
 					<Link to={`/profile/${post.author?._id}`}>
-						<Avatar>
-							<AvatarImage src={post.author?.profilePicture} alt='Post_image' />
-							<AvatarFallback>CN</AvatarFallback>
-						</Avatar>
+						<div className={`${isUploadedStory && post?.author?._id === user?._id && (storyCircle && 'p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full')}`}>
+							<Avatar className='w-11 h-11'>
+								<AvatarImage className='border-2 border-white rounded-full' src={post.author?.profilePicture} alt='Post_image' />
+								<AvatarFallback>CN</AvatarFallback>
+							</Avatar>
+						</div>
 					</Link>
 
 					<div className='flex items-center gap-2'>
@@ -271,7 +287,7 @@ function Post({ post }) {
 					}} className='cursor-pointer text-sm text-gray-400'>view all {comment.length} comments</span>
 				}
 
-				<CommentDialog openCommentDialog={openCommentDialog} setOpenCommentDialog={setOpenCommentDialog} isFollowing={isFollowing} setIsFollowing={setIsFollowing} followUnfollowHandler={followUnfollowHandler}/>
+				<CommentDialog openCommentDialog={openCommentDialog} setOpenCommentDialog={setOpenCommentDialog} isFollowing={isFollowing} setIsFollowing={setIsFollowing} followUnfollowHandler={followUnfollowHandler} />
 
 				<div className='flex items-center justify-between'>
 					<input

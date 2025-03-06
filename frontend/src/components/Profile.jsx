@@ -32,6 +32,9 @@ function Profile() {
 	const [activeTab, setActiveTab] = useState("posts");
 
 
+	const [storyCircle, setStoryCircle] = useState(false)
+
+
 	const [openCommentDialog, setOpenCommentDialog] = useState(false)
 	const [open, setOpen] = useState(false)
 
@@ -48,7 +51,7 @@ function Profile() {
 	}
 
 	const displayedPost = activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks
-	console.log(displayedPost)
+	// console.log(displayedPost)
 
 
 	const [isFollowing, setIsFollowing] = useState(false)
@@ -72,7 +75,19 @@ function Profile() {
 	const messageHandler = (userProfile) => {
 		dispatch(setSelectedUser(userProfile))
 		navigate("/chat")
-	}
+	};
+
+
+	const { loggedInUserStory } = useSelector(store => store.story)
+	// console.log(stories)
+	// console.log(loggedInUserStory)
+
+	useEffect(() => {
+		if (loggedInUserStory) {
+			setStoryCircle(loggedInUserStory)
+		}
+	}, [loggedInUserStory])
+
 
 
 	return (
@@ -81,11 +96,12 @@ function Profile() {
 
 				<div className='grid grid-cols-2'>
 
-					<section className='flex items-center justify-center'>
-						<Avatar className='h-40 w-40 mr-10'>
-							<AvatarImage className='object-cover' src={userProfile?.profilePicture} alt="profile_Photo" />
-							<AvatarFallback>CN</AvatarFallback>
-						</Avatar>
+					<section className='flex items-center justify-center'> 
+							{/* <Avatar className='h-40 w-40 mr-10 border-2 border-white'> */}
+							<Avatar className={` h-40 w-40 mr-10 ${storyCircle && 'p-[3px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full'}`}>
+								<AvatarImage className=' border-2 border-white object-cover rounded-full' src={userProfile?.profilePicture} alt="profile_Photo" />
+								<AvatarFallback className='bg-gray-200'>CN</AvatarFallback>
+							</Avatar> 
 					</section>
 
 					<section className='w-[25rem]'>
