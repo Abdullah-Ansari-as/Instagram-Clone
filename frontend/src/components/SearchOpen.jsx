@@ -30,9 +30,9 @@ function SearchOpen({ searchOpen, setSearchOpen }) {
 	return (
 
 		<Sheet open={searchOpen}>
-			<SheetContent onInteractOutside={() => setSearchOpen(false)} side={"left"} className="w-[400px] sm:w-[540px] bg-white rounded-r-2xl">
+			<SheetContent onInteractOutside={() => {setSearchOpen(false), setSearchInput("")}} side={"left"} className="w-[400px] sm:w-[540px] bg-white rounded-r-2xl">
 				<SheetHeader>
-					<SheetTitle className='font-semibold text-2xl mt-7'>Search</SheetTitle>
+					<SheetTitle className='font-semibold text-2xl mt-4'>Search</SheetTitle>
 					<SheetDescription>
 						<div className="relative w-full max-w-md mt-7">
 							<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
@@ -51,8 +51,13 @@ function SearchOpen({ searchOpen, setSearchOpen }) {
 					<span className='font-semibold '>Recent</span>
 				</div>
 
+				{
+					searchInput === "" && <div className="flex items-center justify-center h-[65%]">
+						<p className='text-gray-500 text-sm'>No recent searches.</p>
+					</div>
+				} 
 
-				<div className="h-[80vh] overflow-y-auto w-full">
+				<div className="h-[63vh] overflow-y-auto w-full ">
 					{
 						searchInput && searchedUser.map((user) => {
 							return (
@@ -76,11 +81,7 @@ function SearchOpen({ searchOpen, setSearchOpen }) {
 						})
 					}
 				</div>
-				{
-					searchInput === "" && <div className="flex items-center justify-center h-[65%]">
-						<p className='text-gray-500 text-sm'>No recent searches.</p>
-					</div>
-				} 
+				
 			</SheetContent>
 		</Sheet>
 

@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Dialog, DialogContent, DialogHeader } from './ui/dialog';
-import { useSelector } from 'react-redux';
+import { Dialog, DialogContent, DialogHeader } from './ui/dialog'; 
 import { Link } from 'react-router-dom';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import { AvatarImage } from '@radix-ui/react-avatar';
+import { Loader2 } from 'lucide-react';
 
 function ViewStory({ openStatus, setOpenStatus, selectedUserStory, duration = 6000 }) {
 	// console.log(selectedUserStory)
+
+	const [statusLoader, setStatusLoader] = useState(true);
+
+	useEffect(() => {
+		if(selectedUserStory) {
+			setStatusLoader(false)
+		}
+	}, [selectedUserStory])
 
 	const [progress, setProgress] = useState(0);
 
@@ -70,7 +78,11 @@ function ViewStory({ openStatus, setOpenStatus, selectedUserStory, duration = 60
 						</div>
 					</DialogHeader>
 
-					<div className="flex items-center justify-center h-72">
+					{
+						statusLoader ? (
+							<div className='flex h-screen justify-center items-center'><Loader2 className='text-slate-400 h-12 w-12 animate-spin' /></div>					
+						) : (
+							<div className="flex items-center justify-center h-72">
 
 						<div className="w-full h-96 overflow-hidden flex justify-center items-center">
 
@@ -82,8 +94,9 @@ function ViewStory({ openStatus, setOpenStatus, selectedUserStory, duration = 60
 
 						</div>
 
-
 					</div>
+						)
+					}
 
 
 				</DialogContent>

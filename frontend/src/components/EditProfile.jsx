@@ -69,7 +69,7 @@ function EditProfile() {
 					profilePicture: res.data.data?.profilePicture,
 					gender: res.data.data?.gender
 				}
-				console.log(updatedUserData)
+				// console.log(updatedUserData)
 				dispatch(setAuthUser(updatedUserData));
 				navigate(`/profile/${user?._id}`)
 				toast.success(res.data.message)
@@ -118,7 +118,7 @@ function EditProfile() {
 						<SelectContent>
 							<SelectGroup> 
 								<SelectItem value="male">Male</SelectItem>
-								<SelectItem value="femail">Femail</SelectItem> 
+								<SelectItem value="female">Female</SelectItem> 
 							</SelectGroup>
 						</SelectContent>
 					</Select>

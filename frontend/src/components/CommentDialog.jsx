@@ -10,10 +10,13 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { setPosts } from '@/redux/postSlice'
 
-function CommentDialog({ openCommentDialog, setOpenCommentDialog, isFollowing, followUnfollowHandler }) {
-
+function CommentDialog({ open, setOpen, openCommentDialog, setOpenCommentDialog, isFollowing, followUnfollowHandler }) {
+  // console.log(setOpenCommentDialog)
   const { selectedPost, posts } = useSelector(store => store.post);
   // console.log(selectedPost)
+  const { user } = useSelector(store => store.auth);
+
+  const isLoggedInUser = user?._id === selectedPost?.author._id;
 
   const [text, setText] = useState("");
   const [comment, setComment] = useState([]);
@@ -90,10 +93,13 @@ function CommentDialog({ openCommentDialog, setOpenCommentDialog, isFollowing, f
   }
 
   return (
-    <Dialog open={openCommentDialog}>
+    <Dialog open={openCommentDialog || open}>
       <DialogContent
-        className='max-w-2xl p-0 flex flex-col  w-[70vw] md:w-[80vw] h-[80vh] '
-        onInteractOutside={() => setOpenCommentDialog(false)}
+        className='max-w-2xl p-0 flex flex-col w-[70vw] md:w-[80vw] h-[80vh] '
+        onInteractOutside={() => {
+          if (openCommentDialog) setOpenCommentDialog(false)
+          if (open) setOpen(false)
+        }}
       >
         <div className="flex flex-col md:flex-row flex-1 h-[32rem]">
           <div className='w-full md:w-1/2'>
@@ -108,7 +114,7 @@ function CommentDialog({ openCommentDialog, setOpenCommentDialog, isFollowing, f
               <div className='flex items-center gap-3'>
                 <Link to={`/profile/${selectedPost?.author._id}`} >
                   <Avatar>
-                    <AvatarImage src={selectedPost?.author?.profilePicture} />
+                    <AvatarImage src={selectedPost?.author?.profilePicture} className='object-cover'/>
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                 </Link>
@@ -127,12 +133,16 @@ function CommentDialog({ openCommentDialog, setOpenCommentDialog, isFollowing, f
 
                 <DialogContent className='flex flex-col items-center text-center text-sm lg:w-[28rem] w-72 bg-white border rounded-[20px] gap-0 px-0' >
                   {
-                    isFollowing ? (
-                      <Button variant='ghost' className=" rounded-xl text-red-500 hover:text-red-500 font-bold w-fit my-2" onClick={followUnfollowHandler}>Unfollow </Button>
-                    ) : (
-                      <Button variant='ghost' className=" rounded-xl text-[#3BADF8] hover:text-[#2a8aca] font-bold w-fit my-2" onClick={followUnfollowHandler}>Follow </Button>
+                    !isLoggedInUser && (
+                      isFollowing ? (
+                        <Button variant='ghost' className=" rounded-xl text-red-500 hover:text-red-500 font-bold w-fit my-2" onClick={followUnfollowHandler}>Unfollow </Button>
+                      ) : (
+                        <Button variant='ghost' className=" rounded-xl text-[#3BADF8] hover:text-[#2a8aca] font-bold w-fit my-2" onClick={followUnfollowHandler}>Follow </Button>
+                      )
                     )
                   }
+
+
                   <hr className='w-full color' />
                   {
                     isBookMarked ? (
@@ -143,7 +153,10 @@ function CommentDialog({ openCommentDialog, setOpenCommentDialog, isFollowing, f
                   }
                   <hr className='w-full color' />
                   <Button variant='ghost' className=" rounded-xl font-bold w-fit my-2"><Link to={`/profile/${selectedPost?.author._id}`}>go to profile</Link></Button><hr className='w-full color' />
-                  <Button variant='ghost' className=" rounded-xl font-bold w-fit mt-2 mb-0" onClick={() => setOpenCommentDialog(false)}>cancel </Button>
+                  <Button variant='ghost' className=" rounded-xl font-bold w-fit mt-2 mb-0" onClick={() => {
+                    if (openCommentDialog) setOpenCommentDialog(false)
+                    if (open) setOpen(false)
+                  }}>cancel </Button>
                 </DialogContent>
 
               </Dialog>
@@ -155,7 +168,7 @@ function CommentDialog({ openCommentDialog, setOpenCommentDialog, isFollowing, f
                   comment.length > 0 ? (
                     comment.slice().reverse().map((comment) => {
                       // console.log(comment);
-                        return  <Comment key={comment._id} comment={comment} />                    
+                      return <Comment key={comment._id} comment={comment} />
                     })
                   ) : (
                     <p className='h-[50vh] flex justify-center items-center'>Be a first comment</p>

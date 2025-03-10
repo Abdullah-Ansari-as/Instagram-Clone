@@ -55,7 +55,7 @@ function ChatPage() {
 				<Link to={`/profile/${user?._id}`}><h1 className='font-bold mb-8 px-3 text-xl'>{user?.username}</h1></Link>
 				{/* <hr className='mb-4 border-gray-300' /> */}
 				<div className="h-[80vh] overflow-y-auto
-									[&::-webkit-scrollbar]:w-2
+									[&::-webkit-scrollbar]:w-1
 									[&::-webkit-scrollbar-track]:rounded-full
 									[&::-webkit-scrollbar-track]:bg-gray-100
 									[&::-webkit-scrollbar-thumb]:rounded-full

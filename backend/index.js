@@ -3,7 +3,7 @@ import express, { urlencoded } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser"; 
 import connectDB from './utils/db.js';
-import { app, server, io } from './socket/socket.js'; 
+import { app, server } from './socket/socket.js'; 
 
 app.use(express.json());
 app.use(cookieParser());

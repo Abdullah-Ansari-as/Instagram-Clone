@@ -74,7 +74,7 @@ function SuggestedUsers() {
 								<Link to={`/profile/${user._id}`}>
 									<Avatar>
 										<AvatarImage src={user?.profilePicture} alt='Post_image' />
-										<AvatarFallback>CN</AvatarFallback>
+										<AvatarFallback className='bg-gray-200'>CN</AvatarFallback>
 									</Avatar>
 								</Link>
 								<div className=''>
@@ -84,7 +84,7 @@ function SuggestedUsers() {
 							</div>
 
 							{
-								<span onClick={() => followUnfollowHandler(user?._id)} className='text-xs w-12 text-[#3BADF8] font-bold cursor-pointer hover:text-[#2a8aca] ml-6'>
+								<span onClick={() => followUnfollowHandler(user?._id)} className={`text-xs w-12 text-[#3BADF8] font-bold cursor-pointer hover:text-[#2a8aca] ml-6 ${followStatus[user?._id] ? "text-[#424242] hover:text-[#353434]" : ""}`}>
 									{followStatus[user?._id] ? 'Unfollow' : 'Follow'}
 								</span>
 							}

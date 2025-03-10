@@ -76,8 +76,8 @@ function LeftSideBar() {
 			icon: (
 				<div className={`${storyCircle && 'p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full'}`}>
 					<Avatar className="w-7 h-7 border-2 border-white">
-						<AvatarImage src={user?.profilePicture} />
-						<AvatarFallback>CN</AvatarFallback>
+						<AvatarImage src={user?.profilePicture} className='object-cover'/>
+						<AvatarFallback className='bg-gray-200'>CN</AvatarFallback>
 					</Avatar>
 				</div >
 			), text: "Profile"

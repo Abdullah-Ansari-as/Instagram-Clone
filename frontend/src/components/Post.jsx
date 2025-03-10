@@ -180,23 +180,29 @@ function Post({ post }) {
 	return (
 
 
-		<div className='my-8 w-full max-w-sm mx-auto'>
+		<div className='my-4 w-full max-w-sm mx-auto'>
 			<div className="flex items-center justify-between mx-3 640px:mx-0">
 				<div className="flex items-center gap-2">
 
 					<Link to={`/profile/${post.author?._id}`}>
 						<div className={`${isUploadedStory && post?.author?._id === user?._id && (storyCircle && 'p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full')}`}>
 							<Avatar className='w-11 h-11'>
-								<AvatarImage className='border-2 border-white rounded-full' src={post.author?.profilePicture} alt='Post_image' />
+								<AvatarImage className='object-cover border-2 border-white rounded-full' src={post.author?.profilePicture} alt='Post_image' />
 								<AvatarFallback>CN</AvatarFallback>
 							</Avatar>
 						</div>
 					</Link>
 
 					<div className='flex items-center gap-2'>
-						<Link to={`/profile/${post.author?._id}`}><h1>{post.author?.username}</h1></Link>
-						<span className='text-sm text-gray-400'>{formattedDate}</span>
-						{user._id === post.author._id && <Badge className='bg-[#f2f3f5] rounded-xl' variant="secondary">Author</Badge>}
+						<Link to={`/profile/${post.author?._id}`}><h1>{post.author?.username}  </h1></Link>
+						<span className='text-sm text-gray-400'>{formattedDate}</span> 
+						{user._id === post.author._id ? (
+							<Badge className='bg-[#f2f3f5] rounded-xl' variant="secondary">Author</Badge>
+						) : (
+							<span onClick={followUnfollowHandler} className={`text-xs text-[#3BADF8] font-bold cursor-pointer hover:text-[#2a8aca] ml-2 ${isFollowing ? "text-[#424242] hover:text-[#353434]" : ""}`}>
+								{isFollowing ? 'Unfollow' : 'Follow'}
+							</span>
+						)}
 					</div>
 				</div>
 
@@ -287,7 +293,13 @@ function Post({ post }) {
 					}} className='cursor-pointer text-sm text-gray-400'>view all {comment.length} comments</span>
 				}
 
-				<CommentDialog openCommentDialog={openCommentDialog} setOpenCommentDialog={setOpenCommentDialog} isFollowing={isFollowing} setIsFollowing={setIsFollowing} followUnfollowHandler={followUnfollowHandler} />
+				<CommentDialog
+					openCommentDialog={openCommentDialog}
+					setOpenCommentDialog={setOpenCommentDialog}
+					isFollowing={isFollowing}
+					setIsFollowing={setIsFollowing}
+					followUnfollowHandler={followUnfollowHandler}
+				/>
 
 				<div className='flex items-center justify-between'>
 					<input
@@ -301,8 +313,10 @@ function Post({ post }) {
 						text && <span onClick={commentHandler} className='text-[#3BADF8] cursor-pointer'>Post</span>
 					}
 				</div>
+
 			</div>
 
+				<hr className='w-full my-4 border-gray-300' />
 		</div>
 
 	)

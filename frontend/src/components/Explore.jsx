@@ -3,40 +3,35 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import CommentDialog from './CommentDialog'
 import { setSelectedPost } from '@/redux/postSlice'
+import axios from 'axios'
+import { toast } from 'sonner'
 
 function Explore() {
 
-	const { posts } = useSelector(store => store.post)
+	const { posts, selectedPost } = useSelector(store => store.post)
+	const { userProfile, user } = useSelector(store => store.auth)
 	const [open, setOpen] = useState(false) 
 	const dispatch = useDispatch();
 
-	// if (loading) {
-	// 	return (
-	// 		<div className="flex h-screen items-center justify-center">
-	// 			<div aria-label="Loading..." role="status"><svg class="h-12 w-12 animate-spin stroke-gray-500" viewBox="0 0 256 256">
-	// 			<line x1="128" y1="32" x2="128" y2="64" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
-	// 			<line x1="195.9" y1="60.1" x2="173.3" y2="82.7" stroke-linecap="round" stroke-linejoin="round"
-	// 				stroke-width="24"></line>
-	// 			<line x1="224" y1="128" x2="192" y2="128" stroke-linecap="round" stroke-linejoin="round" stroke-width="24">
-	// 			</line>
-	// 			<line x1="195.9" y1="195.9" x2="173.3" y2="173.3" stroke-linecap="round" stroke-linejoin="round"
-	// 				stroke-width="24"></line>
-	// 			<line x1="128" y1="224" x2="128" y2="192" stroke-linecap="round" stroke-linejoin="round" stroke-width="24">
-	// 			</line>
-	// 			<line x1="60.1" y1="195.9" x2="82.7" y2="173.3" stroke-linecap="round" stroke-linejoin="round"
-	// 				stroke-width="24"></line>
-	// 			<line x1="32" y1="128" x2="64" y2="128" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
-	// 			<line x1="60.1" y1="60.1" x2="82.7" y2="82.7" stroke-linecap="round" stroke-linejoin="round" stroke-width="24">
-	// 			</line>
-	// 		</svg>
-	// 		</div>
-	// 		</div>
-	// 	)
-	// }
+	// console.log(user)
 
+	const [isFollowing, setIsFollowing] = useState(false)
 	useEffect(() => {
-		
-	}, [])
+		setIsFollowing(user.following.includes(selectedPost?.author._id))
+	}, [selectedPost?._id, user])
+
+	const followUnfollowHandler = async () => {
+		setIsFollowing((prev) => !prev)
+		try {
+			const res = await axios.post(`http://localhost:3000/api/v1/users/followorUnfollow/${selectedPost?.author._id}`, {}, { withCredentials: true });
+			// console.log(res) 
+			if (res.data.success) {
+				toast.success(res.data.message);
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	return (
 
@@ -70,7 +65,7 @@ function Explore() {
 
 						})
 					}
-					<CommentDialog open={open} setOpen={setOpen} />
+					<CommentDialog open={open} setOpen={setOpen} isFollowing={isFollowing} followUnfollowHandler={followUnfollowHandler} />
 				</div>
 			</div>
 		</div>

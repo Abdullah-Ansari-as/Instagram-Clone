@@ -130,6 +130,43 @@ const logout = async (req, res) => {
 	}
 };
 
+const uploadProfilePicture = async (req, res) => {
+	try {
+		const userId = req.id;
+		const localFilePath = req.file?.path;
+
+		let cloudResponse;
+
+		if (localFilePath) {
+			const fileUploaded = await uploadOnCloudinary(localFilePath);
+			// console.log(fileUploaded)
+			cloudResponse = fileUploaded.secure_url;
+			// console.log(cloudResponse)
+			if (!fileUploaded.url) {
+				return res.status(400).json({
+					message: "faild to upload profile picture on cloudinary"
+				})
+			}
+		};
+		// console.log(cloudResponse)
+
+		const user = await User.findByIdAndUpdate(userId, { $set: { profilePicture: cloudResponse } }, { new: true }).select("-password");
+		// console.log(user)
+
+		return res.status(200).json({
+			data: user,
+			message: "Profile Picture uploaded successfully",
+			success: true
+		})
+
+	} catch (error) {
+		return res.status(500).json({
+			message: "failed to upload a profile picture",
+			success: false
+		})
+	}
+};
+
 const getProfile = async (req, res) => {
 	try {
 		const userId = req.params.id;
@@ -143,6 +180,14 @@ const getProfile = async (req, res) => {
 		// const user = await User.findById(userId).populate({ path: 'posts', populate:{path: "comments", select: "text author", populate:{path: "author", select: "username profilePicture"}}, createdAt: -1 }).select("-password").populate("bookmarks");
 		// same uper wali line But with formated text:)
 		const user = await User.findById(userId) // Find the user by userId
+			.populate({
+				path: "followers", 
+				select: "username profilePicture bio followers following"
+			})
+			.populate({
+				path: "following", 
+				select: "username profilePicture bio followers following"
+			})
 			.populate({
 				path: "posts", // Populate the 'posts' field in the User model
 				populate: [ // imp ---> use array inside the populate option to populate multiple fields at the same level.
@@ -206,10 +251,15 @@ const getProfile = async (req, res) => {
 const editProfile = async (req, res) => {
 	try {
 		const userId = req.id;
-		const { bio, gender } = req.body;
+		let { bio, gender } = req.body;
 		const localFilePath = req.file?.path;
 		// console.log(localFilePath) 
 		// console.log(bio, gender)
+
+		// Ensure gender is either 'male', 'female', or null
+		if (!["male", "female"].includes(gender)) {
+			gender = null;
+		}
 
 		let cloudResponse;
 
@@ -413,6 +463,7 @@ export {
 	register,
 	login,
 	logout,
+	uploadProfilePicture,
 	getProfile,
 	editProfile,
 	getSuggestedUser,

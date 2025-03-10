@@ -15,11 +15,11 @@ import ViewStory from './ViewStory';
 function AddStory() {
 	useEffect(() => {
 		const fetchStories = async () => {
-		  await useGetStories(); // Call the function properly
+			await useGetStories(); // Call the function properly
 		};
-	  
+
 		fetchStories();
-	  }, []);
+	}, []);
 
 	const { user } = useSelector(store => store.auth);
 	// console.log(user)
@@ -132,7 +132,7 @@ function AddStory() {
 						<div className={`${isUploadedStory && 'p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full'}`}>
 							<Avatar className="w-[66px] h-[66px] group-hover:scale-95 border-2 transition-transform border-white rounded-full">
 								<AvatarImage
-									className="bg-gray-200 grayscale-[10%] hover:grayscale-[40%]"
+									className="bg-gray-200 grayscale-[10%] hover:grayscale-[40%] object-cover"
 									src={user?.profilePicture}
 								/>
 								<AvatarFallback className="bg-gray-200 text-white">CN</AvatarFallback>
@@ -144,8 +144,15 @@ function AddStory() {
 					</div>
 				}
 
-				<div className={`gap-3 flex ${isUploadedStory ? "ml-4" : ""}`}>
-					{sortedStories.map((story) => (
+				<div className={`gap-3 h-[100px] flex overflow-x-auto
+									[&::-webkit-scrollbar]:h-1
+									[&::-webkit-scrollbar-track]:rounded-full
+									[&::-webkit-scrollbar-track]:bg-gray-100
+									[&::-webkit-scrollbar-thumb]:rounded-full
+									[&::-webkit-scrollbar-thumb]:bg-gray-300
+									dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+									dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 ${isUploadedStory ? "ml-4" : ""}`}>
+					{sortedStories && sortedStories.map((story) => (
 						<div
 							key={story.author._id}
 							className={`flex items-end cursor-pointer relative bottom-[6px]`}
@@ -159,8 +166,8 @@ function AddStory() {
 								<div className={`${stories && 'p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full'}`}>
 									<Avatar className="w-[66px] h-[66px] group-hover:scale-95 border-2 transition-transform border-white rounded-full">
 										<AvatarImage
-											className="bg-gray-200 grayscale-[10%] hover:grayscale-[40%]"
-											src={story.author.profilePicture}
+											className="bg-gray-200 object-cover grayscale-[10%] hover:grayscale-[40%]"
+											src={story?.author?.profilePicture}
 											alt={story.author.username}
 										/>
 										<AvatarFallback className="bg-gray-200 text-white">CN</AvatarFallback>

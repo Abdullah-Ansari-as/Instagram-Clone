@@ -31,7 +31,7 @@ function NotificationOpen({ openNotifications, setOpenNotifications }) {
 								</div>
 							) : (
 								<div className="h-[80vh] overflow-y-auto
-									[&::-webkit-scrollbar]:w-2
+									[&::-webkit-scrollbar]:w-1
 									[&::-webkit-scrollbar-track]:rounded-full
 									[&::-webkit-scrollbar-track]:bg-gray-100
 									[&::-webkit-scrollbar-thumb]:rounded-full

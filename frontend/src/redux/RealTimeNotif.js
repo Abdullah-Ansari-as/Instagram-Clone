@@ -13,7 +13,7 @@ const rtnSlice = createSlice({
 			} else if(action.payload.type === 'dislike') {
 				state.likeNotification = state.likeNotification.filter((item) => item.userId !== action.payload.userId);
 			} else if(Array.isArray(action.payload)) {
-				// alert("work") // later 
+				state.likeNotification = action.payload;
 			}
 		}
 	}

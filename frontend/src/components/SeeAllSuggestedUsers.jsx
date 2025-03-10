@@ -16,7 +16,7 @@ function SeeAllSuggestedUsers() {
 		if (suggestedUsers) {
 			const initialStatus = {};
 			suggestedUsers.forEach((suggestedUser) => {
-				initialStatus[suggestedUser._id] = suggestedUser.followers.includes(user._id);
+				initialStatus[suggestedUser?._id] = suggestedUser?.followers.includes(user?._id);
 			})
 			setFollowStatus(initialStatus);
 		}
@@ -55,18 +55,19 @@ function SeeAllSuggestedUsers() {
 								<Link to={`/profile/${user._id}`}>
 									<Avatar>
 										<AvatarImage src={user?.profilePicture} alt='Post_image' />
-										<AvatarFallback>CN</AvatarFallback>
+										<AvatarFallback className='bg-gray-200'>CN</AvatarFallback>
 									</Avatar>
 								</Link>
 								<div className=''>
 									<h1 className='font-semibold text-sm'><Link to={`/profile/${user._id}`}>{user?.username}</Link></h1>
-									<span className='text-gray-600 text-sm'>{user?.bio.length > 55 ? user?.bio.slice(0, 55) + '...' : user?.bio || "Bio here"}</span>
+									<span className='text-gray-600 text-sm'>{user?.bio?.length > 55 ? user?.bio.slice(0, 55) + '...' : user?.bio || "Bio here"}</span>
 								</div>
 							</div>
 
 							{
-								<span onClick={() => followUnfollowHandler(user?._id)} className=''>
-									<Button className='text-white rounded-xl bg-[#0095f6] hover:bg-[#0e80cc]'>{followStatus[user?._id] ? 'Unfollow' : 'Follow'}</Button>
+								<span onClick={() => followUnfollowHandler(user._id)} className=''>
+									{/* <Button className='text-white rounded-xl bg-[#0095f6] hover:bg-[#0e80cc]'>{followStatus[user?._id] ? 'Unfollow' : 'Follow'}</Button> */}
+									<Button className={`text-white rounded-xl bg-[#0095f6] hover:bg-[#0e80cc] p-3 ${followStatus[user?._id] ? "hover:bg-[#cccaca] bg-[#dbdbdb] text-black" : ""}`}>{followStatus[user?._id] ? 'Unfollow' : 'Follow' }</Button>
 								</span>
 							}
 
