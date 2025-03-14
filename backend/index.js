@@ -4,6 +4,11 @@ import cors from "cors";
 import cookieParser from "cookie-parser"; 
 import connectDB from './utils/db.js';
 import { app, server } from './socket/socket.js'; 
+import path from "path";
+
+
+const __dirname = path.resolve();
+// console.log(__dirname)
 
 app.use(express.json());
 app.use(cookieParser());
@@ -16,13 +21,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 
-// app.get("/", (req, res) => {
-// 	return res.status(200).json({
-// 		message: "im comming from backend",
-// 		success: true
-// 	})
-// })
-
 // import routes
 import userRouter from "./routes/user-routes.js";
 import postRouter from "./routes/post-route.js";
@@ -34,6 +32,12 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/messages", messageRouter);
 app.use("/api/v1/story", storyRouter);
+
+
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
+app.get("*", (req, res) => {
+	res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+})
 
 
 server.listen(process.env.PORT  || 3000, () => {
