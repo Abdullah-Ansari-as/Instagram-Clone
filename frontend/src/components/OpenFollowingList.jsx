@@ -21,7 +21,7 @@ function OpenFollowingList({openFollowing, setOpenFollowing}) {
  
 
 	const userFollowingSearch = userProfile?.following?.filter((following) => {
-        return following.username.toLowerCase().includes(input.toLowerCase())
+        return following.username?.toLowerCase().includes(input?.toLowerCase())
     })
 
 
@@ -33,8 +33,8 @@ function OpenFollowingList({openFollowing, setOpenFollowing}) {
 			if (userProfile) {
 				const initialStatus = {};
 				userProfile?.following.forEach((followingUser) => {
-					initialStatus[followingUser?._id] = followingUser.followers.includes(user?._id);				
-					console.log(followingUser)
+					initialStatus[followingUser?._id] = followingUser.followers?.includes(user?._id);				
+					// console.log(followingUser)
 				})
 				setFollowStatus(initialStatus);
 			}
@@ -64,7 +64,7 @@ function OpenFollowingList({openFollowing, setOpenFollowing}) {
 
 	return (
 		<Dialog open={openFollowing} className=''>
-			<DialogContent onInteractOutside={() => setOpenFollowing(false)} className='bg-white w-[30vw] md:w-[30vw] h-[70vh] rounded-xl'>
+			<DialogContent onInteractOutside={() => setOpenFollowing(false)} className='bg-white w-[82vw] md:w-[30vw] h-[70vh] rounded-xl'>
 				<DialogHeader>
 					<DialogTitle className='flex justify-center items-center h-10 text-base'>Followings</DialogTitle>
 					<hr />
@@ -76,7 +76,7 @@ function OpenFollowingList({openFollowing, setOpenFollowing}) {
 							value={input}
 							onChange={(e) => setInput(e.target.value)}
 						/>
-						<button onClick={() => setInput("")}><RxCrossCircled className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" /></button>
+						<button onClick={() => setInput("")}><RxCrossCircled className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-500" /></button>
 					</div>
 				</DialogHeader>
 

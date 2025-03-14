@@ -77,7 +77,7 @@ function CreatePost({ open, setOpen }) {
 
 	return (
 		<Dialog open={open} className=''>
-			<DialogContent onInteractOutside={() => {setOpen(false), setImgpreview("")}} className='w-[18rem] md:w-[26rem] rounded-xl gap-0 bg-white pb-5 border-none sm:border-none '>
+			<DialogContent onInteractOutside={() => {setOpen(false), setImgpreview(""), setCaption("")}} className='w-[248px] sm:w-[26rem] rounded-xl gap-0 bg-white pb-2 sm:pb-5 border-none sm:border-none '>
 				<DialogHeader className='sm:text-center font-semibold text-lg py-3'>
 					Create new Post
 				</DialogHeader>
@@ -86,7 +86,7 @@ function CreatePost({ open, setOpen }) {
 				<div className="mx-3">
 					<div className='flex gap-3 items-center my-5'>
 						<Avatar>
-							<AvatarImage src={user?.profilePicture} alt='img' />
+							<AvatarImage src={user?.profilePicture} alt='img' className='object-cover'/>
 							<AvatarFallback className='bg-gray-200'>CN</AvatarFallback>
 						</Avatar>
 						<div>
@@ -99,7 +99,7 @@ function CreatePost({ open, setOpen }) {
 					{
 						imgPreview && (
 							<div className="w-full h-64 flex items-center justify-center">
-								<img src={imgPreview} alt="image_preview" className='w-full h-full object-contain rounded-md' />
+								<img src={imgPreview} alt="only picture can upload" className='w-full h-full object-contain rounded-md' />
 							</div>
 						)
 					}

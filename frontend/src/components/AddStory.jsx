@@ -121,7 +121,7 @@ function AddStory() {
 	return (
 		<>
 
-			<div className="w-[37rem] flex items-center">
+			<div className="w-[20rem] lg:w-[26rem] 1251px:w-[37rem] 1175px:w-[31rem] flex items-center sm:mt-5">
 
 				{
 					!isUploadedStory && <div

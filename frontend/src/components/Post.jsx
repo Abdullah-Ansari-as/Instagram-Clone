@@ -78,6 +78,7 @@ function Post({ post }) {
 	}
 
 	const likeDisLikHandler = async () => {
+		// console.log(post._id)
 		try {
 			setIsAnimating(true);
 			const action = liked ? "dislike" : "like"
@@ -98,7 +99,7 @@ function Post({ post }) {
 					)
 				})
 				// console.log(updatedPostData)
-				dispatch(setPosts(updatedPostData));
+				dispatch(setPosts(updatedPostData)); 
 				setTimeout(() => setIsAnimating(false), 500); // Reset animation after 500ms
 				toast.success(res.data.message)
 			}
@@ -180,8 +181,8 @@ function Post({ post }) {
 	return (
 
 
-		<div className='my-4 w-full max-w-sm mx-auto'>
-			<div className="flex items-center justify-between mx-3 640px:mx-0">
+		<div className='my-4 w-full max-w-sm mx-auto mb-10' onClick={() =>dispatch(setSelectedPost(post))}>
+			<div className="flex items-center justify-between mx-2 640px:mx-0">
 				<div className="flex items-center gap-2">
 
 					<Link to={`/profile/${post.author?._id}`}>
@@ -258,7 +259,7 @@ function Post({ post }) {
 				alt="post_img"
 			/>
 
-			<div className="mx-4 640px:mx-0">
+			<div className=" mx-[10px] 640px:mx-0">
 
 				<div className="flex items-center justify-between my-2">
 					<div className="flex gap-3">
@@ -299,6 +300,13 @@ function Post({ post }) {
 					isFollowing={isFollowing}
 					setIsFollowing={setIsFollowing}
 					followUnfollowHandler={followUnfollowHandler}
+					likeDisLikHandler={likeDisLikHandler}
+					bookmarkHandler={bookmarkHandler}
+					isAnimating={isAnimating}
+					setIsAnimating={setIsAnimating}
+					liked={liked}
+					setLiked={setLiked}
+					postLike={postLike}
 				/>
 
 				<div className='flex items-center justify-between'>

@@ -48,7 +48,7 @@ function ViewStory({ openStatus, setOpenStatus, selectedUserStory, duration = 60
 				{
 					openStatus && <div className="fixed inset-0 bg-[#5e5d5d] z-50" onClick={() => setOpenStatus(false)} />
 				}
-				<DialogContent onInteractOutside={() => setOpenStatus(false)} className='w-[18rem] h-[96vh]  lg:border-none md:w-[26rem] rounded-xl gap-0 bg-black pb-5 sm:border-none' >
+				<DialogContent onInteractOutside={() => setOpenStatus(false)} className='w-[255px] sm:w-[18rem] h-[94vh] sm:h-[96vh]  lg:border-none md:w-[26rem] rounded-xl gap-0 bg-black pb-5 sm:border-none' >
 					<DialogHeader>
 						<div className="w-full h-[70px] bg-black rounded-xl flex flex-col relative overflow-hidden">
 							{/* Loader Bar */}
@@ -62,7 +62,7 @@ function ViewStory({ openStatus, setOpenStatus, selectedUserStory, duration = 60
 								<div className="flex items-center gap-2">
 									<Link to={`/profile/${selectedUserStory?.author._id}`}>
 										<Avatar>
-											<AvatarImage src={selectedUserStory.author.profilePicture} alt='Post_image' />
+											<AvatarImage className='object-cover' src={selectedUserStory.author.profilePicture} alt='Post_image' />
 											<AvatarFallback>CN</AvatarFallback>
 										</Avatar>
 									</Link>
@@ -89,7 +89,7 @@ function ViewStory({ openStatus, setOpenStatus, selectedUserStory, duration = 60
 							<img
 								src={selectedUserStory?.imageUrl}
 								alt="story-image"
-								className="h-full w-auto object-cover"
+								className="h-full w-auto object-contain"
 							/>
 
 						</div>

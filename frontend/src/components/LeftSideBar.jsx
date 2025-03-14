@@ -1,4 +1,4 @@
-import { Heart, Home, LogOut, MessageCircle, Search, PlusSquare, TrendingUp } from 'lucide-react'
+import { Heart, LogOut, Search } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { toast } from 'sonner'
@@ -12,6 +12,11 @@ import { Button } from './ui/button';
 import SearchOpen from './SearchOpen'
 import NotificationOpen from './NotificationOpen'
 import { setLikeNotification } from '@/redux/RealTimeNotif'
+import { FaRegCompass } from "react-icons/fa6";
+import { GoHome } from "react-icons/go";
+import { RiMessengerLine } from "react-icons/ri";
+import { TbSquareRoundedPlus } from "react-icons/tb";
+
 
 
 function LeftSideBar() {
@@ -54,6 +59,7 @@ function LeftSideBar() {
 			navigate(`/profile/${user?._id}`);
 		} else if (textType === "Home") {
 			navigate('/')
+			window.scrollTo({ top: 0, behavior: 'smooth' });
 		} else if (textType === "Messages") {
 			navigate('/chat')
 		} else if (textType === "Search") {
@@ -66,17 +72,17 @@ function LeftSideBar() {
 	}
 
 	const sideBarItems = [
-		{ icon: <Home className='w-7 h-7' />, text: "Home" },
+		{ icon: <GoHome className='w-7 h-7' />, text: "Home" },
 		{ icon: <Search className='w-7 h-7' />, text: "Search" },
-		{ icon: <TrendingUp className='w-7 h-7' />, text: "Explore" },
-		{ icon: <MessageCircle className='w-7 h-7' />, text: "Messages" },
-		{ icon: <Heart className='w-7 h-7' />, text: "Notifications" },
-		{ icon: <PlusSquare className='w-7 h-7' />, text: "Create" },
+		{ icon: <FaRegCompass className='w-[25px] h-[25px]' />, text: "Explore" },
+		{ icon: <RiMessengerLine className='w-7 h-7' />, text: "Messages" },
+		{ icon: <Heart className='w-[26px] h-[26px]' />, text: "Notifications" },
+		{ icon: <TbSquareRoundedPlus className='w-7 h-7' />, text: "Create" },
 		{
 			icon: (
 				<div className={`${storyCircle && 'p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full'}`}>
 					<Avatar className="w-7 h-7 border-2 border-white">
-						<AvatarImage src={user?.profilePicture} className='object-cover'/>
+						<AvatarImage src={user?.profilePicture} className='object-cover' />
 						<AvatarFallback className='bg-gray-200'>CN</AvatarFallback>
 					</Avatar>
 				</div >
@@ -97,22 +103,38 @@ function LeftSideBar() {
 	}, [loggedInUserStory])
 
 
+	const [activeItem, setActiveItem] = useState("Home"); // Default active item
+
+	const sidebarHandlerrr = (item) => {
+	  setActiveItem(item); // Update active state
+	};
+
+
 	return (
-		<div className='sm:flex px-4 w-20 1120px:w-60 lg:w-48 shrink hidden border-r border-gray-300 h-screen fixed top-0 z-10 left-0 '>
-			<div className="flex flex-col">
+
+		<div className={`
+			${searchOpen || openNotifications ? "1120px:w-20  m-auto" : ""}
+			fixed sm:top-0 sm:left-0 z-10 sm:h-screen sm:w-20 sm:border-r sm:border-gray-300 bg-white
+			sm:flex h-10 w-full bottom-0 top-auto border-t sm:border-t-0 sm:flex-col
+			lg:-w-48
+			1120px:w-60
+		`}>
+			<div className="flex justify-center flex-row sm:flex-col">
 
 				{/* Picture Shown on large screens */}
-				<div className={`flex ${searchOpen || openNotifications ? "justify-center items-center" : ""}`}>
+				<div className={`flex ${searchOpen || openNotifications ? "justify-start items-center mx-auto 1120px:m-0" : ""}`}>
 					<Link to='/'>
 						{
 							searchOpen || openNotifications ? (
 								<img
-									className='block lg:my-3 my-3 object-cover lg:mt-5 mt-4 md:w-[40px] '
+								onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+									className='block my-3 object-cover 1120px:my-4 1120px:ml-[16px] m-auto 1120px:m-0 mt-4  w-[36px]'
 									src="/instaLogoForSm.png"
 									alt="Logo" />
 							) : (
 								<img
-									className='hidden lg:block mt-3 pl-4 w-[120px]'
+								onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+									className='hidden 1120px:block mt-3 pl-4 w-[120px]'
 									src="/instaLogo.png"
 									alt="Logo" />
 							)
@@ -123,16 +145,23 @@ function LeftSideBar() {
 				{/* Picture Shown on small screens */}
 				{
 					searchOpen || openNotifications ? "" : <Link to='/' className={`flex items-center justify-center ${searchOpen || openNotifications ? 'mt-2' : ''}`}><img
-						className='block lg:hidden lg:my-3 my-3 object-cover lg:mt-5 mt-4 lg:pl-4 md:w-[40px]'
+					onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+						className='hidden sm:block 1120px:hidden 1120px:my-3 my-3 object-cover 1120px:mt-5 mt-4 1120px:pl-4 w-[36px]'
 						src="/instaLogoForSm.png"
 						alt="Logo" /></Link>
 				}
 				{
 					sideBarItems.map((item, ind) => {
 						return (
-							<div onClick={() => sidebarHandler(item.text)} key={ind} className='flex items-center gap-4 my-2  relative hover:cursor-pointer hover:bg-gray-100 rounded-xl p-3'>
+							<div onClick={() => {
+								sidebarHandler(item.text)
+								sidebarHandlerrr(item.text)
+								}} key={ind} className={`flex h-full mx-[7px] m-auto sm:mx-2 items-center justify-center 1120px:justify-start gap-4 my-2 relative hover:cursor-pointer hover:bg-gray-100 rounded-xl px-2 sm:px-3 sm:pt-3 sm:pb-2 ${["Messages", "Notifications"].includes(item.text) ? "hidden sm:flex" : ""} `}>
 								<span className=''>{item.icon}</span>
-								<span className={`text-lg font-medium ${searchOpen || openNotifications ? 'hidden' : 'hidden lg:block'}`}>{item.text}</span>
+								<span className={`text-lg
+									 ${searchOpen || openNotifications ? 'hidden' : 'hidden 1120px:block'}
+									 ${activeItem === item.text ? "font-semibold" : ""}
+									 `}>{item.text}</span>
 								{
 									item.text === "Notifications" && likeNotification.length > 0 && (
 										<Button size='icon' className='rounded-full h-5 w-5 bg-red-600 hover:bg-red-600 text-white absolute bottom-6 left-6'>{likeNotification.length}</Button>
@@ -141,11 +170,11 @@ function LeftSideBar() {
 							</div>
 						)
 					})
+
 				}
-			</div>
-			{
-				searchOpen || openNotifications ? <div className="h-full w-[1px] bg-gray-300 ml-[10px]"></div> : ""
-			}
+
+
+			</div> 
 
 			<SearchOpen searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
 			<NotificationOpen openNotifications={openNotifications} setOpenNotifications={setOpenNotifications} />

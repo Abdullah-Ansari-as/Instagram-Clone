@@ -65,7 +65,7 @@ function OpenFollowersList({ openFollowers, setOpenFollowers }) {
 
 	return (
 		<Dialog open={openFollowers} className=''>
-			<DialogContent onInteractOutside={() => setOpenFollowers(false)} className='bg-white w-[30vw] md:w-[30vw] h-[70vh] rounded-xl'>
+			<DialogContent onInteractOutside={() => setOpenFollowers(false)} className='bg-white w-[82vw] sm:w-[30vw] h-[70vh] rounded-xl'>
 				<DialogHeader>
 					<DialogTitle className='flex justify-center items-center h-10 text-base'>Followers</DialogTitle>
 					<hr />
@@ -77,7 +77,7 @@ function OpenFollowersList({ openFollowers, setOpenFollowers }) {
 							value={input}
 							onChange={(e) => setInput(e.target.value)}
 						/>
-						<button onClick={() => setInput("")}><RxCrossCircled className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" /></button>
+						<button onClick={() => setInput("")}><RxCrossCircled className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-500" /></button>
 					</div>
 				</DialogHeader>
 

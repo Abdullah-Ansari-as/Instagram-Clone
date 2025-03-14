@@ -16,7 +16,7 @@ function NotificationOpen({ openNotifications, setOpenNotifications }) {
 
 	return (
 		<Sheet open={openNotifications}>
-			<SheetContent onInteractOutside={() => setOpenNotifications(false)} side={"left"} className="w-[400px] sm:w-[540px] bg-white rounded-r-2xl">
+			<SheetContent onInteractOutside={() => setOpenNotifications(false)} side={"left"} className="w-[230px] sm:w-[540px] bg-white rounded-r-2xl">
 				<SheetHeader>
 					<SheetTitle className='font-bold text-2xl'>Notifications</SheetTitle>
 					<span className='font-bold pb-3'>This month</span>
@@ -27,7 +27,7 @@ function NotificationOpen({ openNotifications, setOpenNotifications }) {
 						{
 							likeNotification.length === 0 ? (
 								<div className='flex items-center justify-center'>
-									<p className='text-gray-500 mt-12'>no new notification</p>
+									<p className='text-gray-500 mt-16'>no new notification</p>
 								</div>
 							) : (
 								<div className="h-[80vh] overflow-y-auto

@@ -73,7 +73,7 @@ function SuggestedUsers() {
 							<div className="flex items-center gap-2">
 								<Link to={`/profile/${user._id}`}>
 									<Avatar>
-										<AvatarImage src={user?.profilePicture} alt='Post_image' />
+										<AvatarImage src={user?.profilePicture} alt='Post_image' className='object-cover'/>
 										<AvatarFallback className='bg-gray-200'>CN</AvatarFallback>
 									</Avatar>
 								</Link>
@@ -95,7 +95,7 @@ function SuggestedUsers() {
 			}
 			{/* <SeeAllSuggestedUsers /> */}
 
-			<div className="flex w-64 flex-wrap gap-x-4 gap-y-2 text-xs text-gray-400  mt-8 mb-4">
+			<div className="flex w-64 flex-wrap gap-x-4 gap-y-2 text-xs text-gray-400  mt-8 mb-4 ">
 				<span>About</span>
 				<span>Help</span>
 				<span>Press</span>

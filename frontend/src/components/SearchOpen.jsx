@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { RxCrossCircled } from "react-icons/rx";
 
 function SearchOpen({ searchOpen, setSearchOpen }) {
+	// console.log(searchOpen)
 	const [searchInput, setSearchInput] = useState("")
 	const suggestedUsers = useSelector(store => store.auth.suggestedUsers)
 	// console.log(suggestedUsers)
@@ -30,11 +31,11 @@ function SearchOpen({ searchOpen, setSearchOpen }) {
 	return (
 
 		<Sheet open={searchOpen}>
-			<SheetContent onInteractOutside={() => {setSearchOpen(false), setSearchInput("")}} side={"left"} className="w-[400px] sm:w-[540px] bg-white rounded-r-2xl">
+			<SheetContent onInteractOutside={() => {setSearchOpen(false), setSearchInput("")}} side={"left"} className="w-[230px] sm:w-[540px] bg-white rounded-r-2xl">
 				<SheetHeader>
-					<SheetTitle className='font-semibold text-2xl mt-4'>Search</SheetTitle>
+					<SheetTitle className='font-semibold text-2xl sm:mt-4 mt-0'>Search</SheetTitle>
 					<SheetDescription>
-						<div className="relative w-full max-w-md mt-7">
+						<div className="relative w-full max-w-md sm:mt-7 mt-2">
 							<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
 							<input
 								className="w-full bg-[#EFEFEF] pl-10 pr-3 py-2 rounded-[8px] border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400"
@@ -66,7 +67,7 @@ function SearchOpen({ searchOpen, setSearchOpen }) {
 									<div className="flex items-center gap-2 my-3 hover:bg-gray-100 p-1">
 										{/* <Link to={`/profile/${user._id}`} onClick={searchedUserclickHandler}> */}
 										<Avatar>
-											<AvatarImage src={user?.profilePicture} alt='Post_image' />
+											<AvatarImage src={user?.profilePicture} alt='Post_image' className='object-cover'/>
 											<AvatarFallback>CN</AvatarFallback>
 										</Avatar>
 										{/* </Link> */}
