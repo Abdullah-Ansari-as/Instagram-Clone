@@ -36,7 +36,7 @@ function Login() {
 				},
 				withCredentials: true
 			});
-			console.log(res)
+			// console.log(res)
 			if (res.data.success) {
 				dispatch(setAuthUser(res.data.user))
 				navigate('/')
@@ -60,6 +60,8 @@ function Login() {
 			navigate("/")
 		}
 	}, []);
+
+	// console.log(process.env.REACT_APP_API_URL)
 
 	return (
 		<div className='flex justify-center items-center w-screen h-screen'>
