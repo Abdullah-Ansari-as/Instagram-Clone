@@ -8,7 +8,7 @@ const useGetSuggestedUsers = () => {
 	useEffect(() => {
 		const getSuggestedUsers = async () => {
 			try {
-				const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/users/suggested`, { withCredentials: true });
+				const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/users/suggested`, { withCredentials: true });
 				// console.log(res)
 				if (res.data.success) {
 					dispatch(setSuggestedUsers(res.data.users))

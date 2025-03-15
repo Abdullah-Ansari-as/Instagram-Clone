@@ -60,7 +60,7 @@ function CommentDialog({ open, setOpen, openCommentDialog, setOpenCommentDialog,
     event.preventDefault();
     try {
       // console.log(selectedPost._id)
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/posts/${selectedPost?._id}/comment`, { text }, {
+      const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/posts/${selectedPost?._id}/comment`, { text }, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -95,7 +95,7 @@ function CommentDialog({ open, setOpen, openCommentDialog, setOpenCommentDialog,
 
   const deletePostHandler = async () => {
     try {
-      const res = await axios.delete(`${process.env.REACT_APP_API_URL}/api/v1/posts/delete/${selectedPost?._id}`, { withCredentials: true })
+      const res = await axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/posts/delete/${selectedPost?._id}`, { withCredentials: true })
       if (res.data.success) {
         const updatedPosts = posts.filter((postItem) => postItem?._id !== selectedPost?._id)
         // console.log(updatedPosts)
@@ -112,7 +112,7 @@ function CommentDialog({ open, setOpen, openCommentDialog, setOpenCommentDialog,
 
   const bookmarkHandlerr = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/posts/${selectedPost?._id}/bookmark`, { withCredentials: true });
+      const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/posts/${selectedPost?._id}/bookmark`, { withCredentials: true });
       if (res.data.success) {
         setIsBookMarked(!isBookMarked)
         toast.success(res.data.message);
@@ -127,7 +127,7 @@ function CommentDialog({ open, setOpen, openCommentDialog, setOpenCommentDialog,
 		try {
 			setIsAnimating(true);
 			const action = liked ? "dislike" : "like"
-			const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/posts/${selectedPost?._id}/${action}`, { withCredentials: true });
+			const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/posts/${selectedPost?._id}/${action}`, { withCredentials: true });
 			if (res.data.success) {
 				const updatedLikes = liked ? postLike - 1 : postLike + 1
 				setPostLike(updatedLikes)

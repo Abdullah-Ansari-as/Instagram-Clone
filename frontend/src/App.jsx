@@ -68,9 +68,9 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(process.env.REACT_APP_API_URL)
+    // console.log(import.meta.env.VITE_REACT_APP_API_URL)
     if (user) {
-      const socketio = io(process.env.REACT_APP_API_URL, {
+      const socketio = io(import.meta.env.VITE_REACT_APP_API_URL, {
         query: {
           userId: user?._id
         },

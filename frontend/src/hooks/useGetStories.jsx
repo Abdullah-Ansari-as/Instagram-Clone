@@ -11,7 +11,7 @@ function useGetStories() {
 	useEffect(() => {
 		const getAllStories = async () => {
 			try {
-				const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/story/stories`, { withCredentials: true });
+				const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/story/stories`, { withCredentials: true });
 				// console.log(res);
 				if(res.data.success) {
 					dispatch(setStories(res.data.stories) )

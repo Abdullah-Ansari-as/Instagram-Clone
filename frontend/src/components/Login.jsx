@@ -28,22 +28,17 @@ function Login() {
 
 	const loginHandler = async (e) => {
 		e.preventDefault();
-		try {
- 
-	// console.log("hello world")
-	// console.log(process.env.REACT_APP_API_URL)
+		try { 
 
 			setLoading(true)
-			const res = await axios.post(`${import.meta.env.REACT_APP_API_URL}/api/v1/users/login`, input, {
+			const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/users/login`, input, {
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				withCredentials: true
 			});
 			// console.log(res)
-			if (res.data.success) {
-	// 			console.log("hello world")
-	// console.log(process.env.REACT_APP_API_URL)
+			if (res.data.success) { 
 				dispatch(setAuthUser(res.data.user))
 				navigate('/')
 				toast.success(res.data.message);

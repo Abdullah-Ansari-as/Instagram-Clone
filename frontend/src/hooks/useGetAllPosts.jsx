@@ -10,7 +10,7 @@ const useGetAllPosts = () => {
 		const fetchAllPosts = async () => {
 			try {
 				// console.log("before")
-				const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/posts/all`, { withCredentials: true });
+				const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/posts/all`, { withCredentials: true });
 				// console.log(res)
 				if (res.data.success) {
 					dispatch(setPosts(res.data.posts))

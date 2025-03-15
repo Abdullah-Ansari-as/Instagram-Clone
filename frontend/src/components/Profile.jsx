@@ -114,7 +114,7 @@ function Profile() {
 
 		try {
 			setLoading(true)
-			const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/users/upload/profilePicture`, formData, {
+			const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/users/upload/profilePicture`, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				},

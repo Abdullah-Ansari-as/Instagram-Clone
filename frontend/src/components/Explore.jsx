@@ -26,7 +26,7 @@ function Explore() {
 	const followUnfollowHandler = async () => {
 		setIsFollowing((prev) => !prev)
 		try {
-			const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/users/followorUnfollow/${selectedPost?.author._id}`, {}, { withCredentials: true });
+			const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/users/followorUnfollow/${selectedPost?.author._id}`, {}, { withCredentials: true });
 			// console.log(res) 
 			if (res.data.success) {
 				toast.success(res.data.message);
