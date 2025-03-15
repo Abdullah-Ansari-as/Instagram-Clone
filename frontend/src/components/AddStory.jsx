@@ -69,8 +69,7 @@ function AddStory() {
 			if (isUploadedStory) {
 				toast.message('To share your new story, we’ll first remove the previous one')
 				setOpen(false)
-				setImgpreview("")
-
+				setImgpreview("") 
 			} else {
 
 				setLoading(true)
