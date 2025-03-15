@@ -48,9 +48,9 @@ function ViewStory({ openStatus, setOpenStatus, selectedUserStory, duration = 60
 				{
 					openStatus && <div className="fixed inset-0 bg-[#5e5d5d] z-50" onClick={() => setOpenStatus(false)} />
 				}
-				<DialogContent onInteractOutside={() => setOpenStatus(false)} className='w-[255px] sm:w-[18rem] h-[94vh] sm:h-[96vh]  lg:border-none md:w-[26rem] rounded-xl gap-0 bg-black pb-5 sm:border-none' >
+				<DialogContent onInteractOutside={() => setOpenStatus(false)} className='w-[255px] sm:w-[18rem] h-[76vh] sm:h-[96vh] lg:border-none md:w-[26rem] rounded-xl gap-0 bg-black pb-5 sm:border-none' >
 					<DialogHeader>
-						<div className="w-full h-[70px] bg-black rounded-xl flex flex-col relative overflow-hidden">
+						<div className="w-full h-[94px] bg-black rounded-xl flex flex-col relative overflow-hidden">
 							{/* Loader Bar */}
 							<div className="absolute top-2 left-4 right-4 h-1 bg-gray-500/50 rounded-full overflow-hidden">
 								<div
