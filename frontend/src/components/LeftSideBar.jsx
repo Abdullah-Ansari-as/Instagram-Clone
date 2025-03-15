@@ -72,16 +72,16 @@ function LeftSideBar() {
 	}
 
 	const sideBarItems = [
-		{ icon: <GoHome className='w-7 h-7' />, text: "Home" },
-		{ icon: <Search className='w-7 h-7' />, text: "Search" },
-		{ icon: <FaRegCompass className='w-[25px] h-[25px]' />, text: "Explore" },
-		{ icon: <RiMessengerLine className='w-7 h-7' />, text: "Messages" },
-		{ icon: <Heart className='w-[26px] h-[26px]' />, text: "Notifications" },
-		{ icon: <TbSquareRoundedPlus className='w-7 h-7' />, text: "Create" },
+		{ icon: <GoHome className='w-8 h-8' />, text: "Home" },
+		{ icon: <Search className='w-8 h-8' />, text: "Search" },
+		{ icon: <FaRegCompass className='w-[29px] h-[29px]' />, text: "Explore" },
+		{ icon: <RiMessengerLine className='w-8 h-8' />, text: "Messages" },
+		{ icon: <Heart className='w-[31px] h-[31px]' />, text: "Notifications" },
+		{ icon: <TbSquareRoundedPlus className='w-8 h-8' />, text: "Create" },
 		{
 			icon: (
 				<div className={`${storyCircle && 'p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full'}`}>
-					<Avatar className="w-7 h-7 border-2 border-white">
+					<Avatar className="w-8 h-8 border-2 border-white">
 						<AvatarImage src={user?.profilePicture} className='object-cover' />
 						<AvatarFallback className='bg-gray-200'>CN</AvatarFallback>
 					</Avatar>
@@ -113,9 +113,9 @@ function LeftSideBar() {
 	return (
 
 		<div className={`
-			${searchOpen || openNotifications ? "1120px:w-20  m-auto" : ""}
+			${searchOpen || openNotifications ? "1120px:w-20 m-auto" : ""}
 			fixed sm:top-0 sm:left-0 z-10 sm:h-screen sm:w-20 sm:border-r sm:border-gray-300 bg-white
-			sm:flex h-10 w-full bottom-0 top-auto border-t sm:border-t-0 sm:flex-col
+			sm:flex h-[50px] w-full bottom-0 top-auto border-t sm:border-t-0 sm:flex-col
 			lg:-w-48
 			1120px:w-60
 		`}>

@@ -64,7 +64,7 @@ function Post({ post }) {
 
 	const deletePostHandler = async () => {
 		try {
-			const res = await axios.delete(`http://localhost:3000/api/v1/posts/delete/${post?._id}`, { withCredentials: true })
+			const res = await axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/posts/delete/${post?._id}`, { withCredentials: true })
 			if (res.data.success) {
 				const updatedPosts = posts.filter((postItem) => postItem?._id !== post?._id)
 				// console.log(updatedPosts)
@@ -82,7 +82,7 @@ function Post({ post }) {
 		try {
 			setIsAnimating(true);
 			const action = liked ? "dislike" : "like"
-			const res = await axios.get(`http://localhost:3000/api/v1/posts/${post._id}/${action}`, { withCredentials: true });
+			const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/posts/${post._id}/${action}`, { withCredentials: true });
 			if (res.data.success) {
 				const updatedLikes = liked ? postLike - 1 : postLike + 1
 				setPostLike(updatedLikes)
@@ -110,7 +110,7 @@ function Post({ post }) {
 
 	const commentHandler = async () => {
 		try {
-			const res = await axios.post(`http://localhost:3000/api/v1/posts/${post._id}/comment`, { text }, {
+			const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/posts/${post._id}/comment`, { text }, {
 				headers: {
 					'Content-Type': 'application/json'
 				},
@@ -136,7 +136,7 @@ function Post({ post }) {
 
 	const bookmarkHandler = async () => {
 		try {
-			const res = await axios.get(`http://localhost:3000/api/v1/posts/${post?._id}/bookmark`, { withCredentials: true });
+			const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/posts/${post?._id}/bookmark`, { withCredentials: true });
 			if (res.data.success) {
 				setIsBookMarked(!isBookMarked)
 				toast.success(res.data.message);
@@ -259,23 +259,23 @@ function Post({ post }) {
 				alt="post_img"
 			/>
 
-			<div className=" mx-[10px] 640px:mx-0">
+			<div className=" mx-[15px] 640px:mx-0">
 
 				<div className="flex items-center justify-between my-2">
 					<div className="flex gap-3">
 						{
-							liked ? <FaHeart onClick={likeDisLikHandler} className={`cursor-pointer text-red-600 size-5 md:size-6 ${isAnimating ? 'animate-heartBeat' : ''}`} /> : <FaRegHeart onClick={likeDisLikHandler} className='cursor-pointer hover:text-gray-600 size-5 md:size-6' />
+							liked ? <FaHeart onClick={likeDisLikHandler} className={`cursor-pointer text-red-600 size-6 ${isAnimating ? 'animate-heartBeat' : ''}`} /> : <FaRegHeart onClick={likeDisLikHandler} className='cursor-pointer hover:text-gray-600 size-6' />
 						}
 
 						<MessageCircle onClick={() => {
 							dispatch(setSelectedPost(post))
 							setOpenCommentDialog(true)
-						}} className='cursor-pointer hover:text-gray-600 size-5 md:size-6' />
-						<Send className='cursor-pointer hover:text-gray-600 size-5 md:size-6' />
+						}} className='cursor-pointer hover:text-gray-600 size-6' />
+						<Send className='cursor-pointer hover:text-gray-600 size-6' />
 					</div>
 					<div className="">
 						{
-							isBookMarked ? <IoBookmark onClick={bookmarkHandler} className='cursor-pointer hover:text-gray-600 size-5 md:size-6' /> : <IoBookmarkOutline onClick={bookmarkHandler} className='cursor-pointer hover:text-gray-600 size-5 md:size-6' />
+							isBookMarked ? <IoBookmark onClick={bookmarkHandler} className='cursor-pointer hover:text-gray-600 size-6' /> : <IoBookmarkOutline onClick={bookmarkHandler} className='cursor-pointer hover:text-gray-600 size-6' />
 						}
 					</div>
 				</div>

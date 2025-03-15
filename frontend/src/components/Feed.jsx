@@ -29,16 +29,16 @@ function Feed() {
 
 					<div className="relative">
 						{/* Messenger Icon */}
-						<Heart onClick={() => setOpenNotifications(true)} className='w-[24px] h-[24px]' />
+						<Heart onClick={() => setOpenNotifications(true)} className='w-[30px] h-[30px]' />
 
 						{/* Notification Badge */}
 						{likeNotification.length > 0 && (
-							<div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-xs text-white">
+							<div className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs text-white">
 								{likeNotification.length}
 							</div>
 						)}
 					</div>
-					<RiMessengerLine onClick={() => navigate('/chat')} className='w-[26px] h-[26px]' />
+					<RiMessengerLine onClick={() => navigate('/chat')} className='w-[30px] h-[30px]' />
 
 				</div>
 

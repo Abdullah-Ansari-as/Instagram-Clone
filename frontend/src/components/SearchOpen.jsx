@@ -31,7 +31,7 @@ function SearchOpen({ searchOpen, setSearchOpen }) {
 	return (
 
 		<Sheet open={searchOpen}>
-			<SheetContent onInteractOutside={() => {setSearchOpen(false), setSearchInput("")}} side={"left"} className="w-[230px] sm:w-[540px] bg-white rounded-r-2xl">
+			<SheetContent onInteractOutside={() => {setSearchOpen(false), setSearchInput("")}} side={"left"} className="w-[290px] sm:w-[540px] bg-white rounded-r-2xl">
 				<SheetHeader>
 					<SheetTitle className='font-semibold text-2xl sm:mt-4 mt-0'>Search</SheetTitle>
 					<SheetDescription>

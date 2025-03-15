@@ -16,7 +16,7 @@ function NotificationOpen({ openNotifications, setOpenNotifications }) {
 
 	return (
 		<Sheet open={openNotifications}>
-			<SheetContent onInteractOutside={() => setOpenNotifications(false)} side={"left"} className="w-[230px] sm:w-[540px] bg-white rounded-r-2xl">
+			<SheetContent onInteractOutside={() => setOpenNotifications(false)} side={"left"} className="w-[290px] sm:w-[540px] bg-white rounded-r-2xl">
 				<SheetHeader>
 					<SheetTitle className='font-bold text-2xl'>Notifications</SheetTitle>
 					<span className='font-bold pb-3'>This month</span>

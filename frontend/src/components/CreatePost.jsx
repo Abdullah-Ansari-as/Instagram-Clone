@@ -77,7 +77,7 @@ function CreatePost({ open, setOpen }) {
 
 	return (
 		<Dialog open={open} className=''>
-			<DialogContent onInteractOutside={() => {setOpen(false), setImgpreview(""), setCaption("")}} className='w-[248px] sm:w-[26rem] rounded-xl gap-0 bg-white pb-2 sm:pb-5 border-none sm:border-none '>
+			<DialogContent onInteractOutside={() => {setOpen(false), setImgpreview(""), setCaption("")}} className='w-[300px] sm:w-[26rem] rounded-xl gap-0 bg-white pb-2 sm:pb-5 border-none sm:border-none '>
 				<DialogHeader className='sm:text-center font-semibold text-lg py-3'>
 					Create new Post
 				</DialogHeader>

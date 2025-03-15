@@ -74,7 +74,7 @@ function Profile() {
 	const followUnfollowHandler = async () => {
 		setIsFollowing((prev) => !prev)
 		try {
-			const res = await axios.post(`http://localhost:3000/api/v1/users/followorUnfollow/${userProfile?._id}`, {}, { withCredentials: true });
+			const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/users/followorUnfollow/${userProfile?._id}`, {}, { withCredentials: true });
 			// console.log(res) 
 			if (res.data.success) {
 				toast.success(res.data.message);
@@ -206,9 +206,9 @@ function Profile() {
 								{
 									isLoggedInUserProfile ? (
 										<>
-											<Link to="/account/edit"><Button variant='secondary' className='bg-[#eeeded] hover:bg-[#dbdbdb] h-8 rounded-xl hidden sm:flex'>Edit profile</Button></Link>
-											<Button variant='secondary' className='bg-[#eeeded] hover:bg-[#dbdbdb] h-8 rounded-xl hidden sm:flex'>View archive</Button>
-											<Button variant='secondary' className='bg-[#eeeded] hover:bg-[#dbdbdb] h-8 rounded-xl hidden 860px:flex '>Ad tools</Button>
+											<Link to="/account/edit"><Button variant='secondary' className='bg-[#eeeded] hover:bg-[#dbdbdb] h-10 rounded-xl hidden sm:flex'>Edit profile</Button></Link>
+											<Button variant='secondary' className='bg-[#eeeded] hover:bg-[#dbdbdb] h-10 rounded-xl hidden sm:flex'>View archive</Button>
+											<Button variant='secondary' className='bg-[#eeeded] hover:bg-[#dbdbdb] h-10 rounded-xl hidden 860px:flex '>Ad tools</Button>
 										</>
 									) : (
 										isFollowing ? (

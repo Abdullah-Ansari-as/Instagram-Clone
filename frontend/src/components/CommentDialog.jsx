@@ -156,7 +156,7 @@ function CommentDialog({ open, setOpen, openCommentDialog, setOpenCommentDialog,
   return (
     <Dialog open={openCommentDialog || open}>
       <DialogContent
-        className='max-w-2xl p-0 flex flex-col w-[78vw] sm:w-[70vw] md:w-[80vw] h-[80vh] '
+        className='max-w-2xl p-0 flex flex-col w-[78vw] sm:w-[70vw] md:w-[80vw]'
         onInteractOutside={() => {
           if (openCommentDialog) setOpenCommentDialog(false)
           if (open) setOpen(false)
