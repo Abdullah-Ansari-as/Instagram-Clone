@@ -10,7 +10,7 @@ export const isAuthenticated = async (req, res, next) => {
 			});
 		}
 	
-		const decode = jwt.verify(token, process.env.TOKEN_SECRET_KEY);
+		const decode = jwt.verify(token, process.env.TOKEN_SECRET_KEY || "dhaksjhfkashhaksh3urui42334adsag");
 		if(!decode) {
 			return res.status(401).json({
 				message: "Invalid",
