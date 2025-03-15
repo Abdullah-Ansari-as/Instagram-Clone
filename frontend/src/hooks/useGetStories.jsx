@@ -11,7 +11,7 @@ function useGetStories() {
 	useEffect(() => {
 		const getAllStories = async () => {
 			try {
-				const res = await axios.get('https://insta-clone-abd.up.railway.app/api/v1/story/stories', { withCredentials: true });
+				const res = await axios.get('http://localhost:3000/api/v1/story/stories', { withCredentials: true });
 				// console.log(res);
 				if(res.data.success) {
 					dispatch(setStories(res.data.stories) )

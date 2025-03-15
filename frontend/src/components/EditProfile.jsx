@@ -57,7 +57,7 @@ function EditProfile() {
 
 		try {
 			setLoading(true) 
-			const res = await axios.post('https://insta-clone-abd.up.railway.app/api/v1/users/profile/edit', formData, {
+			const res = await axios.post('http://localhost:3000/api/v1/users/profile/edit', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				},

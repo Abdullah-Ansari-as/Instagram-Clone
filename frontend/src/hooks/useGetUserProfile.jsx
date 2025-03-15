@@ -8,7 +8,7 @@ const useGetUserProfile = (userId) => {
 	useEffect(() => {
 		const fetchUserProfile = async () => {
 			try {
-				const res = await axios.get(`https://insta-clone-abd.up.railway.app/api/v1/users/${userId}/profile`, { withCredentials: true });
+				const res = await axios.get(`http://localhost:3000/api/v1/users/${userId}/profile`, { withCredentials: true });
 				// console.log(res)
 				if (res.data.success) {
 					dispatch(setUserProfile(res.data.data))

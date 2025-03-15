@@ -39,7 +39,7 @@ function SuggestedUsers() {
 				}
 			});
 
-			const res = await axios.post(`https://insta-clone-abd.up.railway.app/api/v1/users/followorUnfollow/${targetUserId}`, {}, { withCredentials: true });
+			const res = await axios.post(`http://localhost:3000/api/v1/users/followorUnfollow/${targetUserId}`, {}, { withCredentials: true });
 			if (res.data.success) {
 				toast.success(res.data.message);
 			}

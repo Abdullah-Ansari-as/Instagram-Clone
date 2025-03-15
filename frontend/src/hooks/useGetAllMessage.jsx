@@ -12,7 +12,7 @@ const useGetAllMessage = () => {
 		const fetchAllMessage = async () => {
 			try {
 				// console.log("before")
-				const res = await axios.get(`https://insta-clone-abd.up.railway.app/api/v1/messages/all/${selectedUser?._id}`, { withCredentials: true });
+				const res = await axios.get(`http://localhost:3000/api/v1/messages/all/${selectedUser?._id}`, { withCredentials: true });
 				// console.log(res)
 				if (res.data.success) {
 					dispatch(setMessages(res.data.messages))

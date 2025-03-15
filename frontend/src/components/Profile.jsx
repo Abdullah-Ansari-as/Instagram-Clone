@@ -74,7 +74,7 @@ function Profile() {
 	const followUnfollowHandler = async () => {
 		setIsFollowing((prev) => !prev)
 		try {
-			const res = await axios.post(`https://insta-clone-abd.up.railway.app/api/v1/users/followorUnfollow/${userProfile?._id}`, {}, { withCredentials: true });
+			const res = await axios.post(`http://localhost:3000/api/v1/users/followorUnfollow/${userProfile?._id}`, {}, { withCredentials: true });
 			// console.log(res) 
 			if (res.data.success) {
 				toast.success(res.data.message);
@@ -114,7 +114,7 @@ function Profile() {
 
 		try {
 			setLoading(true)
-			const res = await axios.post(`https://insta-clone-abd.up.railway.app/api/v1/users/upload/profilePicture`, formData, {
+			const res = await axios.post(`http://localhost:3000/api/v1/users/upload/profilePicture`, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				},
