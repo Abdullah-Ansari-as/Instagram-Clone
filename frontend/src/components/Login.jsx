@@ -26,11 +26,15 @@ function Login() {
 	}
 
 
-	const signupHandler = async (e) => {
+	const loginHandler = async (e) => {
 		e.preventDefault();
 		try {
+ 
+	// console.log("hello world")
+	// console.log(process.env.REACT_APP_API_URL)
+
 			setLoading(true)
-			const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/users/login`, input, {
+			const res = await axios.post(`${import.meta.env.REACT_APP_API_URL}/api/v1/users/login`, input, {
 				headers: {
 					'Content-Type': 'application/json'
 				},
@@ -38,6 +42,8 @@ function Login() {
 			});
 			// console.log(res)
 			if (res.data.success) {
+	// 			console.log("hello world")
+	// console.log(process.env.REACT_APP_API_URL)
 				dispatch(setAuthUser(res.data.user))
 				navigate('/')
 				toast.success(res.data.message);
@@ -61,11 +67,11 @@ function Login() {
 		}
 	}, []);
 
-	// console.log(process.env.REACT_APP_API_URL)
+	
 
 	return (
 		<div className='flex justify-center items-center w-screen h-screen'>
-			<form onSubmit={signupHandler} className="shadow-xl p-8 flex flex-col gap-5 mx-3">
+			<form onSubmit={loginHandler} className="shadow-xl p-8 flex flex-col gap-5 mx-3">
 				<div className="my-4">
 					<img
 						className='lg:block pl-4 w-44 flex justify-center m-auto'
@@ -100,7 +106,7 @@ function Login() {
 							Please wait
 						</Button>
 					) : (
-						<Button type="submit" className="bg-slate-800 hover:bg-slate-900 rounded text-white text-md">Login</Button>
+						<Button type="submit" className="bg-slate-800 hover:bg-slate-900 rounded text-white text-md">Loginn</Button>
 					)
 				}
 				<span className='text-center'>if not have an account? Please <Link to='/signup' className='text-blue-600'>Signup</Link></span>
