@@ -64,7 +64,7 @@ function Post({ post }) {
 
 	const deletePostHandler = async () => {
 		try {
-			const res = await axios.delete(`http://localhost:3000/api/v1/posts/delete/${post?._id}`, { withCredentials: true })
+			const res = await axios.delete(`https://insta-clone-abd.up.railway.app/api/v1/posts/delete/${post?._id}`, { withCredentials: true })
 			if (res.data.success) {
 				const updatedPosts = posts.filter((postItem) => postItem?._id !== post?._id)
 				// console.log(updatedPosts)
@@ -82,7 +82,7 @@ function Post({ post }) {
 		try {
 			setIsAnimating(true);
 			const action = liked ? "dislike" : "like"
-			const res = await axios.get(`http://localhost:3000/api/v1/posts/${post._id}/${action}`, { withCredentials: true });
+			const res = await axios.get(`https://insta-clone-abd.up.railway.app/api/v1/posts/${post._id}/${action}`, { withCredentials: true });
 			if (res.data.success) {
 				const updatedLikes = liked ? postLike - 1 : postLike + 1
 				setPostLike(updatedLikes)
@@ -110,7 +110,7 @@ function Post({ post }) {
 
 	const commentHandler = async () => {
 		try {
-			const res = await axios.post(`http://localhost:3000/api/v1/posts/${post._id}/comment`, { text }, {
+			const res = await axios.post(`https://insta-clone-abd.up.railway.app/api/v1/posts/${post._id}/comment`, { text }, {
 				headers: {
 					'Content-Type': 'application/json'
 				},
@@ -136,7 +136,7 @@ function Post({ post }) {
 
 	const bookmarkHandler = async () => {
 		try {
-			const res = await axios.get(`http://localhost:3000/api/v1/posts/${post?._id}/bookmark`, { withCredentials: true });
+			const res = await axios.get(`https://insta-clone-abd.up.railway.app/api/v1/posts/${post?._id}/bookmark`, { withCredentials: true });
 			if (res.data.success) {
 				setIsBookMarked(!isBookMarked)
 				toast.success(res.data.message);
@@ -155,7 +155,7 @@ function Post({ post }) {
 	const followUnfollowHandler = async () => {
 		setIsFollowing((prev) => !prev)
 		try {
-			const res = await axios.post(`http://localhost:3000/api/v1/users/followorUnfollow/${post?.author._id}`, {}, { withCredentials: true });
+			const res = await axios.post(`https://insta-clone-abd.up.railway.app/api/v1/users/followorUnfollow/${post?.author._id}`, {}, { withCredentials: true });
 			// console.log(res) 
 			if (res.data.success) {
 				toast.success(res.data.message);

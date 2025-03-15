@@ -46,7 +46,7 @@ function CreatePost({ open, setOpen }) {
 		try {
 			// console.log(file, caption)
 			setLoading(true)
-			const res = await axios.post('http://localhost:3000/api/v1/posts/addpost', formData, {
+			const res = await axios.post('https://insta-clone-abd.up.railway.app/api/v1/posts/addpost', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				},

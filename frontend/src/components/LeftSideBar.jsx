@@ -36,7 +36,7 @@ function LeftSideBar() {
 
 	const logoutHandler = async () => {
 		try {
-			const res = await axios.get("http://localhost:3000/api/v1/users/logout", { withCredentials: true });
+			const res = await axios.get("https://insta-clone-abd.up.railway.app/api/v1/users/logout", { withCredentials: true });
 			if (res.data.success) {
 				dispatch(setAuthUser(null));
 				dispatch(setSelectedPost(null));

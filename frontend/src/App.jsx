@@ -69,7 +69,7 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      const socketio = io('http://localhost:3000', {
+      const socketio = io('https://insta-clone-abd.up.railway.app/', {
         query: {
           userId: user?._id
         },
