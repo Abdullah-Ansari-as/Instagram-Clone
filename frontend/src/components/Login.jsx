@@ -31,8 +31,6 @@ function Login() {
 		try { 
 
 			console.log(import.meta.env.VITE_REACT_APP_API_URL)
-			console.log(import.meta.env.VITE_REACT_APP_API_URL)
-			console.log(import.meta.env.VITE_REACT_APP_API_URL)
 
 			setLoading(true)
 			const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/users/login`, input, {
