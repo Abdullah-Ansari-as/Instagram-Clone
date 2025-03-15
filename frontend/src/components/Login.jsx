@@ -31,6 +31,8 @@ function Login() {
 		try { 
 
 			console.log(import.meta.env.VITE_REACT_APP_API_URL)
+			console.log(import.meta.env.VITE_REACT_APP_API_URL)
+			console.log(import.meta.env.VITE_REACT_APP_API_URL)
 
 			setLoading(true)
 			const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/users/login`, input, {
@@ -103,7 +105,7 @@ function Login() {
 							Please wait
 						</Button>
 					) : (
-						<Button type="submit" className="bg-slate-800 hover:bg-slate-900 rounded text-white text-md">Loginn</Button>
+						<Button type="submit" className="bg-slate-800 hover:bg-slate-900 rounded text-white text-md">Login</Button>
 					)
 				}
 				<span className='text-center'>if not have an account? Please <Link to='/signup' className='text-blue-600'>Signup</Link></span>
