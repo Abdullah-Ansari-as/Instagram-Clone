@@ -74,7 +74,7 @@ function AddStory() {
 			} else {
 
 				setLoading(true)
-				const res = await axios.post('http://localhost:3000/api/v1/story/upload/story', formData, {
+				const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/story/upload/story`, formData, {
 					headers: {
 						'Content-Type': 'multipart/form-data'
 					},

@@ -21,7 +21,7 @@ function ChatPage() {
 	const sendMessageHandler = async (receiverId) => {
 		// console.log(receiverId)
 		try {
-			const res = await axios.post(`http://localhost:3000/api/v1/messages/send/${receiverId}`, { textMessage }, {
+			const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/messages/send/${receiverId}`, { textMessage }, {
 				headers: {
 					'Content-Type': 'application/json'
 				},

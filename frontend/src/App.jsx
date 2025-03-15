@@ -68,8 +68,9 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // console.log(process.env.REACT_APP_API_URL)
     if (user) {
-      const socketio = io('http://localhost:3000', {
+      const socketio = io(process.env.REACT_APP_API_URL, {
         query: {
           userId: user?._id
         },
