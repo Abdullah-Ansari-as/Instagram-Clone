@@ -69,7 +69,7 @@ function AddStory() {
 			if (isUploadedStory) {
 				toast.message('To share your new story, we’ll first remove the previous one')
 				setOpen(false)
-				setImgpreview("") 
+				setImgpreview("")
 			} else {
 
 				setLoading(true)
@@ -173,7 +173,9 @@ function AddStory() {
 									</Avatar>
 								</div>
 								<span className='text-xs mt-1 font-normal'>
-									{story?.author.username}
+									{story?.author.username?.length > 5
+										? story?.author.username.slice(0, 5) + "..."
+										: story?.author.username}
 								</span>
 							</div>
 						</div>

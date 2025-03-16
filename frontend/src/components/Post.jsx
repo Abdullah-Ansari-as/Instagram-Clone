@@ -195,7 +195,9 @@ function Post({ post }) {
 					</Link>
 
 					<div className='flex items-center gap-2'>
-						<Link to={`/profile/${post.author?._id}`}><h1>{post.author?.username}  </h1></Link>
+						<Link to={`/profile/${post.author?._id}`}><h1>{post.author?.username?.length > 13
+										? post.author?.username.slice(0, 13) + "..."
+										: post.author?.username}</h1></Link>
 						<span className='text-sm text-gray-400'>{formattedDate}</span> 
 						{user._id === post.author._id ? (
 							<Badge className='bg-[#f2f3f5] rounded-xl' variant="secondary">Author</Badge>
@@ -283,7 +285,9 @@ function Post({ post }) {
 				<span className='text-sm font-medium block mb-1'>{postLike} likes</span>
 
 				<p>
-					<span className='font-medium mr-2'>{post.author?.username}</span>
+					<span className='font-medium mr-2'>{post.author?.username?.length > 26
+										? post.author?.username.slice(0, 26) + "..."
+										: post.author?.username}</span>
 					{post.caption}
 				</p>
 

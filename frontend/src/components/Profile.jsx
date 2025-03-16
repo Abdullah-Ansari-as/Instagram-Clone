@@ -15,7 +15,7 @@ import { setSelectedPost } from '@/redux/postSlice';
 import CreatePost from './CreatePost';
 import { CiSaveDown2 } from "react-icons/ci";
 import { FaCamera } from "react-icons/fa";
-import OpenFollowersList from './OpenFollowersList'; 
+import OpenFollowersList from './OpenFollowersList';
 import OpenFollowingList from './OpenFollowingList';
 
 
@@ -148,13 +148,13 @@ function Profile() {
 
 	if (loadingProfile) return <div className='flex h-screen justify-center items-center'><Loader2 className=' h-12 w-12 animate-spin' /></div>
 
-	return ( 
+	return (
 		<div className='flex w-full max-w-[67rem] mx-auto mt-2 1120px:pl-20
   1251px:w-[67rem] 1175px:w-[62rem] 1120px:w-[57rem] lg:w-[52rem] 900px:w-[45rem] 800px:w-[39rem] md:w-[34rem] sm:w-[30rem]'>
 
-			<div className="w-full flex flex-col gap-7 md:gap-6 p-0 1120px:pl-20 pb-12 sm:py-8 "> 
+			<div className="w-full flex flex-col gap-7 md:gap-6 p-0 1120px:pl-20 pb-12 sm:py-8 ">
 
-				
+
 
 				<div className='grid grid-cols-2 md:mb-8 mb-0'>
 
@@ -202,7 +202,11 @@ function Profile() {
 					<section className='w-[12rem] sm:w-[20rem] md:[25rem] relative right-8 460px:right-0'>
 						<div className="flex flex-col gap-3 mt-2">
 							<div className='flex items-center gap-2'>
-								<span className='text-lg font-semibold'>{userProfile?.username}</span>
+								<span className='text-lg font-semibold'>
+									{userProfile?.username?.length > 8
+										? userProfile.username.slice(0, 8) + "..."
+										: userProfile?.username}
+								</span>
 								{
 									isLoggedInUserProfile ? (
 										<>
@@ -243,7 +247,9 @@ function Profile() {
 							)
 								: (userProfile?.bio || "Bio here...")
 							}</span>
-							<Badge className='w-fit bg-[#f2f3f5] rounded-xl cursor-pointer hover:bg-[#e7e8eb] flex items-center mt-2 pl-1 pr-5' variant='secondary'><AtSign className='h-4' /><span className='pl-1'>{userProfile?.username}</span></Badge>
+							<Badge className='w-fit bg-[#f2f3f5] rounded-xl cursor-pointer hover:bg-[#e7e8eb] flex items-center mt-2 pl-1 pr-5' variant='secondary'><AtSign className='h-4' /><span className='pl-1'>{userProfile?.username?.length > 8
+										? userProfile.username.slice(0, 8) + "..."
+										: userProfile?.username}</span></Badge>
 
 						</div>
 

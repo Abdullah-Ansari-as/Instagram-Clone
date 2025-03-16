@@ -38,7 +38,9 @@ function RightSidebar() {
 					</div>
 				</Link>
 				<div className=''>
-					<h1 className='font-semibold text-sm'><Link to={`/profile/${user._id}`}>{user?.username}</Link></h1>
+					<h1 className='font-semibold text-sm'><Link to={`/profile/${user._id}`}>{user?.username?.length > 23
+										? user.username.slice(0, 23) + "..."
+										: user?.username}</Link></h1>
 					<span className='text-gray-600 text-sm'>{user?.bio?.length > 30 ? user?.bio.slice(0, 30) + '...' : user?.bio || "Bio here"}</span>
 				</div>
 			</div>
