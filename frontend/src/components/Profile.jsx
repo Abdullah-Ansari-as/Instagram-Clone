@@ -206,9 +206,9 @@ function Profile() {
 								{
 									isLoggedInUserProfile ? (
 										<>
-											<Link to="/account/edit"><Button variant='secondary' className='bg-[#eeeded] hover:bg-[#dbdbdb] h-10 rounded-xl hidden sm:flex'>Edit profile</Button></Link>
-											<Button variant='secondary' className='bg-[#eeeded] hover:bg-[#dbdbdb] h-10 rounded-xl hidden sm:flex'>View archive</Button>
-											<Button variant='secondary' className='bg-[#eeeded] hover:bg-[#dbdbdb] h-10 rounded-xl hidden 860px:flex '>Ad tools</Button>
+											<Link to="/account/edit"><Button variant='secondary' className='bg-[#eeeded] hover:bg-[#dbdbdb] h-9 rounded-xl hidden sm:flex'>Edit profile</Button></Link>
+											<Button variant='secondary' className='bg-[#eeeded] hover:bg-[#dbdbdb] h-9 rounded-xl hidden sm:flex'>View archive</Button>
+											<Button variant='secondary' className='bg-[#eeeded] hover:bg-[#dbdbdb] h-9 rounded-xl hidden 860px:flex '>Ad tools</Button>
 										</>
 									) : (
 										isFollowing ? (

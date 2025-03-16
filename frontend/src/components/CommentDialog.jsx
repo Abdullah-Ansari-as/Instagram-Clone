@@ -156,7 +156,7 @@ function CommentDialog({ open, setOpen, openCommentDialog, setOpenCommentDialog,
   return (
     <Dialog open={openCommentDialog || open}>
       <DialogContent
-        className='max-w-2xl p-0 flex flex-col w-[78vw] sm:w-[70vw] md:w-[80vw]'
+        className='max-w-2xl p-0 flex flex-col w-[78vw] sm:w-[70vw] md:w-[80vw] h-[55vh] sm:h-[80vh]'
         onInteractOutside={() => {
           if (openCommentDialog) setOpenCommentDialog(false)
           if (open) setOpen(false)
@@ -171,7 +171,7 @@ function CommentDialog({ open, setOpen, openCommentDialog, setOpenCommentDialog,
               alt="post_img"
             />
           </div>
-          <div className="w-full h-[435px] sm:h-full md:w-1/2 flex flex-col bg-white rounded-[10px] md:rounded-[0px] md:rounded-r-[9px]">
+          <div className="w-full h-[55vh] sm:h-full md:w-1/2 flex flex-col bg-white rounded-[10px] md:rounded-[0px] md:rounded-r-[9px]">
             <div className="flex items-center justify-between p-2 border-b">
               <div className='flex items-center gap-3'>
                 <Link to={`/profile/${selectedPost?.author._id}`} >
@@ -227,7 +227,7 @@ function CommentDialog({ open, setOpen, openCommentDialog, setOpenCommentDialog,
 
               </Dialog>
             </div>
-            <div className="flex-1 overflow-y-auto p-2 sm:p-4 max-h-[20rem] sm:max-h-[29rem]">
+            <div className="flex-1 overflow-y-auto p-2 sm:p-4 max-h-[36rem] sm:max-h-[29rem]">
               {/* Comments and content go here */}
               <p className='text-sm text-gray-600'>
                 {
