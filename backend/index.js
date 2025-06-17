@@ -17,17 +17,20 @@ app.use(cookieParser());
 app.use(urlencoded({extended: true})); 
 
 const corsOptions = {
-	origin: "http://localhost:5173",
+	origin: "https://instagram-clone-ea31.vercel.app",
 	credentials: true
 }
 app.use(cors(corsOptions));
-
 
 // import routes
 import userRouter from "./routes/user-routes.js";
 import postRouter from "./routes/post-route.js";
 import messageRouter from "./routes/message-routes.js";
 import storyRouter from "./routes/story-routes.js"
+
+app.get("/", (req, res) => {
+	res.send("welcome from backend")
+})
 
 // routes dicleration
 app.use("/api/v1/users", userRouter);
