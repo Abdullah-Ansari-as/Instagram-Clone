@@ -60,9 +60,9 @@ function ViewStory({ openStatus, setOpenStatus, selectedUserStory, duration = 60
 							</div>
 							<div className='mx-4 relative top-7'>
 								<div className="flex items-center gap-2">
-									<Link to={`/profile/${selectedUserStory?.author._id}`}>
+									<Link to={`/profile/${selectedUserStory?.author?._id}`}>
 										<Avatar>
-											<AvatarImage className='object-cover' src={selectedUserStory.author.profilePicture} alt='Post_image' />
+											<AvatarImage className='object-cover' src={selectedUserStory.author?.profilePicture} alt='Post_image' />
 											<AvatarFallback>CN</AvatarFallback>
 										</Avatar>
 									</Link>
@@ -71,7 +71,7 @@ function ViewStory({ openStatus, setOpenStatus, selectedUserStory, duration = 60
 											<h1 className='font-semibold text-sm text-gray-50'><Link to={`/profile/${selectedUserStory?.author?._id}`}>{selectedUserStory.author?.username}</Link></h1>
 											<span className='text-xs text-gray-300'>{new Date(selectedUserStory.createdAt).toLocaleTimeString()}</span>
 										</div>
-										<span className='text-gray-50 text-sm'>{selectedUserStory?.author?.bio?.length > 45 ? selectedUserStory?.author.bio?.slice(0, 45) + '...' : selectedUserStory?.author?.bio || "Bio here"}</span>
+										<span className='text-gray-50 text-sm'>{selectedUserStory?.author?.bio?.length > 45 ? selectedUserStory?.author?.bio?.slice(0, 45) + '...' : selectedUserStory?.author?.bio || "Bio here"}</span>
 									</div>
 								</div>
 							</div>

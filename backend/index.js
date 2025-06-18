@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(urlencoded({extended: true})); 
 
 const corsOptions = {
-	origin: "https://instagram-clone-ea31.vercel.app",
+	origin: "http://localhost:5173",
 	credentials: true
 }
 app.use(cors(corsOptions));

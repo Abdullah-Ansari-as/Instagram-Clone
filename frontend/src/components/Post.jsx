@@ -165,7 +165,7 @@ function Post({ post }) {
 		}
 	}
 
-	const isUploadedStory = stories?.some(story => story.author._id === user?._id);
+	const isUploadedStory = stories?.some(story => story.author?._id === user?._id);
 
 	const { loggedInUserStory } = useSelector(store => store.story)
 	// console.log(stories)

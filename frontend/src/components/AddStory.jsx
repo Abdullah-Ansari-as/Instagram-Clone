@@ -64,7 +64,7 @@ function AddStory() {
 
 		try {
 			// check if already upload a story.
-			const isUploadedStory = stories?.some(story => story.author._id === user?._id);
+			const isUploadedStory = stories?.some(story => story?.author?._id === user?._id);
 
 			if (isUploadedStory) {
 				toast.message('To share your new story, we’ll first remove the previous one')
@@ -98,7 +98,7 @@ function AddStory() {
 
 
 	// true if loggedin user uploaded story. otherwise fasle.
-	const isUploadedStory = stories?.some(story => story.author._id === user?._id);
+	const isUploadedStory = stories?.some(story => story.author?._id === user?._id);
 	if (isUploadedStory) {
 		dispatch(setLoggedInUserStory(true))
 	} else {
@@ -108,10 +108,10 @@ function AddStory() {
 
 
 	// Find logged-in user's story
-	const loggedInUserStory = stories.find(story => story.author._id === user?._id);
+	const loggedInUserStory = stories.find(story => story.author?._id === user?._id);
 
 	// Find other users' stories
-	const otherUsersStories = stories.filter(story => story.author._id !== user?._id);
+	const otherUsersStories = stories.filter(story => story.author?._id !== user?._id);
 
 	// Combine: Logged-in user first, then others
 	const sortedStories = loggedInUserStory ? [loggedInUserStory, ...otherUsersStories] : otherUsersStories;
@@ -153,7 +153,7 @@ function AddStory() {
 									dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 ${isUploadedStory ? "ml-4" : ""}`}>
 					{sortedStories && sortedStories.map((story) => (
 						<div
-							key={story.author._id}
+							key={story?.author?._id}
 							className={`flex items-end cursor-pointer relative bottom-[6px]`}
 							onClick={() => {
 								setSelectedUserStory(story); // Set selected story
@@ -167,15 +167,15 @@ function AddStory() {
 										<AvatarImage
 											className="bg-gray-200 object-cover grayscale-[10%] hover:grayscale-[40%]"
 											src={story?.author?.profilePicture}
-											alt={story.author.username}
+											alt={story?.author?.username}
 										/>
 										<AvatarFallback className="bg-gray-200 text-white">CN</AvatarFallback>
 									</Avatar>
 								</div>
 								<span className='text-xs mt-1 font-normal'>
-									{story?.author.username?.length > 5
-										? story?.author.username.slice(0, 5) + "..."
-										: story?.author.username}
+									{story?.author?.username?.length > 5
+										? story?.author?.username.slice(0, 5) + "..."
+										: story?.author?.username}
 								</span>
 							</div>
 						</div>

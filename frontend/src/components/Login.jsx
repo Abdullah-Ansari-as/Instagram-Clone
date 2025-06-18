@@ -31,6 +31,7 @@ function Login() {
 		try { 
 			// console.log(import.meta.env.VITE_REACT_APP_API_URL);
 			setLoading(true) 
+			console.log("object")
 			const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/api/v1/users/login`, input, {
 				headers: {
 					'Content-Type': 'application/json'
@@ -38,6 +39,7 @@ function Login() {
 				withCredentials: true
 			});
 			// console.log(res);
+			console.log("2")
 			if (res.data.success) { 
 				dispatch(setAuthUser(res.data.user))
 				navigate('/')
