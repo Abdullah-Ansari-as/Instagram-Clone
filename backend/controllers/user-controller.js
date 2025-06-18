@@ -46,8 +46,8 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
 	try {
-		const { email, password } = req.body; 
- 
+		const { email, password } = req.body;
+
 
 		if (!email || !password) {
 			return res.status(404).json({
@@ -76,7 +76,7 @@ const login = async (req, res) => {
 		// console.log(isPasswordValid)
 
 		const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET_KEY, { expiresIn: "1d" });
-		// console.log(token)
+		console.log(token)
 
 		// populate each post if in the posts array 
 		const populatedPosts = await Promise.all(
@@ -102,11 +102,20 @@ const login = async (req, res) => {
 		}
 		// console.log(user)
 
-		return res.cookie('token', token, { httpOnly: true, sameSite: "strict", maxAge: 1 * 24 * 60 * 60 * 1000 }).json({
-			user,
-			message: `Welcom back ${user.username}`,
-			success: true
-		});
+
+		const isProduction = process.env.NODE_ENV === "production";
+		return res
+			.cookie("token", token, {
+				httpOnly: true,
+				sameSite: isProduction ? "None" : "Lax",
+				secure: isProduction, // only send over HTTPS
+				maxAge: 24 * 60 * 60 * 1000,
+			})
+			.json({
+				user,
+				message: `Welcome back ${user.username}`,
+				success: true,
+			});
 
 	} catch (error) {
 		return res.status(500).json({
@@ -181,11 +190,11 @@ const getProfile = async (req, res) => {
 		// same uper wali line But with formated text:)
 		const user = await User.findById(userId) // Find the user by userId
 			.populate({
-				path: "followers", 
+				path: "followers",
 				select: "username profilePicture bio followers following"
 			})
 			.populate({
-				path: "following", 
+				path: "following",
 				select: "username profilePicture bio followers following"
 			})
 			.populate({
