@@ -22,6 +22,8 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 
+connectDB();
+
 // import routes
 import userRouter from "./routes/user-routes.js";
 import postRouter from "./routes/post-route.js";
@@ -46,6 +48,6 @@ app.use("/api/v1/story", storyRouter);
 
 
 server.listen(process.env.PORT  || 3000, () => {
-	connectDB();
+	// connectDB();
 	console.log("server is running on port " + process.env.PORT)  
 })
